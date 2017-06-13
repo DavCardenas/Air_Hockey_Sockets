@@ -1,0 +1,22 @@
+Lista de Tareas
+
+* Hacer una invitación de juego hacia otro cliente: debe poder aceptar y rechazar la partida 
+si se rechaza la partida se notifica al primer cliente que no desean jugar, si aceptan
+inicia el juego.
+
+* El juego inicia con un lanzamiento de moneda gana el saque quien gane el sorteo
+
+* Agregar sonido a cada ventana.
+
+* Terminar la interfaz grafica del juego (Definir si se van a trabajar componentes graficos o
+si se va a trabajar con el Graphics)
+
+* La dirección de movimiento del disco depende del área del mazo donde se realice el impacto ç
+(izquierda, derecha o el frente del disco), si el movimiento se va a realizar a izquierda o derecha
+ se debe mover en un ángulo de 45º, si pega en el frente del mazo e disco se debe mover hacia el frente.
+ 
+ * La aplicación debe permitir a cada jugador ver el top de los jugadores mostrar: nickname, puntaje,
+  y numero de anotaciones realizadas.
+  
+  
+  
