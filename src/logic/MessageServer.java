@@ -6,8 +6,8 @@ public class MessageServer extends MessageInterface{
 
 	private ArrayList<Player> players;
 	
-	public MessageServer() {
-	
+	public MessageServer(String type) {
+		super(type);
 	}
 	
 	private String listPlayers() {
@@ -23,4 +23,8 @@ public class MessageServer extends MessageInterface{
 		return listPlayers();
 	}
 
+	@Override
+	public String getType() {
+		return super.getType();
+	}
 }

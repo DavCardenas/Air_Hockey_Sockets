@@ -4,8 +4,8 @@ public class MessageClient extends MessageInterface{
 
 	String namePlayer;
 	
-	
-	public MessageClient(String name) {
+	public MessageClient(String name, String type) {
+		super(type);
 		namePlayer = name;
 	}
 	
@@ -21,5 +21,10 @@ public class MessageClient extends MessageInterface{
 	public void setNamePlayer(String namePlayer) {
 		this.namePlayer = namePlayer;
 	}
-
+	
+	@Override
+	public String getType() {
+		return super.getType();
+	}
+	
 }
