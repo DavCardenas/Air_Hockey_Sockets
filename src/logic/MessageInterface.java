@@ -1,6 +1,7 @@
 package logic;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class MessageInterface implements Serializable{
 	
@@ -12,6 +13,22 @@ public abstract class MessageInterface implements Serializable{
 	 */
 	public MessageInterface(String type) {
 		this.type = type;
+	}
+	
+	/**
+	 * sirve para retornar un jugador
+	 * @return un jugador
+	 */
+	public Player getPlayer() {
+		return null;
+	}
+	
+	/**
+	 * sirve para retorna una lista de jugadores
+	 * @return una lista de jugadores
+	 */
+	public ArrayList<Player> getPlayerList() {
+		return null;
 	}
 	
 	/**

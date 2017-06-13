@@ -25,7 +25,8 @@ public class Server implements Runnable{
 	private ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
 	private ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
-	private Message messageGlobal; // objeto global de tipo mensaje
+	private DataGameClient dataGame; // objeto global de tipo mensaje
+	public static ArrayList<Player> listPlayers; // lista de jugadores
 	
 	
 	/**
@@ -42,7 +43,8 @@ public class Server implements Runnable{
 		threadConect = new Thread(this);
 		conections = new ArrayList<Socket>();
 		drivers = new ArrayList<>();
-		messageGlobal = Singlenton.getMessage();
+		dataGame = Singlenton.getDataGame();
+		listPlayers = new ArrayList<>();
 		createServer(); 
 		threadConect.start();
 		
@@ -108,24 +110,24 @@ public class Server implements Runnable{
 	 * @param p_player jugador a encontrar
 	 * @return
 	 */
-	public int findConection(Player p_player) {
-		int conection = 0;
-		for (int i = 0; i < messageGlobal.getPlayers().size(); i++) {
-			if (messageGlobal.getPlayers().get(i).equals(p_player)) {
-				conection = i;
-			}
-		}
-		return conection;
-	}
+//	public int findConection(Player p_player) {
+//		int conection = 0;
+//		for (int i = 0; i < dataGame.getPlayers().size(); i++) {
+//			if (dataGame.getPlayers().get(i).equals(p_player)) {
+//				conection = i;
+//			}
+//		}
+//		return conection;
+//	}
 	
 	/**
 	 * escribe un mensaje a una conexion especifica
 	 * @param p_player jugador al que se le enviara el mensaje
 	 * @param msn mensaje que se desea enviar
 	 */
-	public void writeMessage(Player p_player, MessageInterface msn) {
-		drivers.get(findConection(p_player)).write(msn);
-	}
+//	public void writeMessage(Player p_player, MessageInterface msn) {
+//		drivers.get(findConection(p_player)).write(msn);
+//	}
 
 	/**
 	 * Metodo que mantieje ejecutando la escucha

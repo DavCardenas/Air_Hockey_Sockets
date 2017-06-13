@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import logic.DataGameClient;
 import logic.Message;
 import logic.Player;
 import logic.Singlenton;
@@ -41,7 +42,9 @@ public class WindowsClient extends JFrame{
 	private GridBagConstraints gbc;
 	private WindowsGame game;
 	
-	private Message message;
+	private DataGameClient dataGame; // elemento global que contiene la informacion del juego
+	private Thread updateList; // hilo que permitira actualizar constantemente la informacion de la lista obtienendo la del singlenton
+	private boolean isUpdateList; // sirve para controlar cuando terminar el hilo de actualizacion de la lista
 	
 	public WindowsClient() {
 		
@@ -67,7 +70,8 @@ public class WindowsClient extends JFrame{
 			}
 		
 		gridbag = new GridBagLayout();
-		message = Singlenton.getMessage();
+		dataGame = Singlenton.getDataGame(); // hace referencia al objeto global que contiene la informacion del juego
+		isUpdateList = true;
 		
 		setTitle(TITLE);
 		setLayout(gridbag);
@@ -96,6 +100,8 @@ public class WindowsClient extends JFrame{
 		});
 		gbc = new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0);
 		add(btn_play, gbc);
+		
+		updatePlayerListGraphics();
 	}
 	
 	/**
@@ -104,12 +110,48 @@ public class WindowsClient extends JFrame{
 	 */
 	public void update(ArrayList<Player> players) {
 		model = new DefaultComboBoxModel<>();
-		for (Player player : players) {
-			model.addElement(player);
+		if(players != null){
+			System.out.println("Tamaño de la lista de jugadores: " + players.size());
+			for (Player player : players) {
+				model.addElement(player);
+			}
 		}
 		
+		
 		cbx_players.setModel(model);
-		cbx_players.updateUI();
+		cbx_players.repaint();
+		//cbx_players.updateUI();
+	}
+	
+	/**
+	 * inicia el hilo para actualizar la lista de los jugadores conectados
+	 * obtiene los valores de actualizacion del singlenton
+	 */
+	public void updatePlayerListGraphics() {
+		updateList = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while (isUpdateList) {
+					update(dataGame.getPlayerList());
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		updateList.start();
+	}
+	
+	/**
+	 * sirve para detener el hilo de actualizacion
+	 */
+	public void stopUpdateList() {
+		isUpdateList = false;
 	}
 	
 	/**

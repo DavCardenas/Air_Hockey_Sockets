@@ -15,7 +15,7 @@ public class OperationsClient {
 	private MessageInterface messageRead; // mensaje para leer
 	private boolean read; // controla cuando se inicia a leer y cuando se detiene
 	private boolean write; // controla cuando se inicia a escribir y cuando se detiene
-		
+	private DataGameClient dataGame; // elemento global que contiene la informacion del juego	
 
 	/**
 	 * 
@@ -26,6 +26,7 @@ public class OperationsClient {
 		conection = socket;
 		read = true;
 		write = true;
+		dataGame = Singlenton.getDataGame();
 	}
 
 	/**
@@ -50,9 +51,10 @@ public class OperationsClient {
 					try {
 						if (inputStream != null) {
 							messageRead = (MessageInterface) inputStream.readObject();							
-							if (messageRead != null) {								
-								if (messageRead.getType().equals("Inicio")) {
-									
+							if (messageRead != null) {	
+								if (messageRead.getType().equals("Lista_Jugadores")) {
+									System.out.println("Mensaje del Servidor: " + messageRead.getPlayerList());
+									dataGame.setPlayerList(messageRead.getPlayerList());
 								}								
 							}
 						}

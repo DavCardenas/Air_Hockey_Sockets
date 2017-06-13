@@ -1,11 +1,17 @@
 package logic;
 
-public class MessageClient extends MessageInterface{
+/**
+ * 
+ * Esta Clase se Utiliza exclusivamente para enviar une mensaje inicial
+ * cuando el cliente se conecta al servidor
+ *
+ */
+public class MessageLoginClient extends MessageInterface{
 
-	String namePlayer;
+	String namePlayer; // nombre del jugador a enviar hacia el servidor
 	
-	public MessageClient(String name, String type) {
-		super(type);
+	public MessageLoginClient(String name) {
+		super("Inicio");
 		namePlayer = name;
 	}
 	

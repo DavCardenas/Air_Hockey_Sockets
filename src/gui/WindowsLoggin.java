@@ -18,7 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.Client;
 import logic.Message;
-import logic.MessageClient;
+import logic.MessageLoginClient;
 import logic.MessageInterface;
 import logic.Player;
 
@@ -118,8 +118,8 @@ public class WindowsLoggin extends JFrame{
 					try {
 						createClient(Integer.parseInt(txt_Port.getText()), txt_Dir.getText());
 						createPlayer(txt_name.getText());
-						openWinClient();
 						minnimizar();
+						openWinClient();
 					} catch (NumberFormatException e2) {
 						JOptionPane.showMessageDialog(null, "Puerto: Solo digitos \nDireccion: xxx.xxx.xxx.xxx");
 					}
@@ -186,7 +186,7 @@ public class WindowsLoggin extends JFrame{
 	}
 	
 	public void registerPlayer(Player player) {
-		MessageInterface msn = new MessageClient(player.getName(), "Inicio");
+		MessageInterface msn = new MessageLoginClient(player.getName());
 		client.getOperations().write(msn);
 	}
 	
