@@ -6,8 +6,9 @@ public class MessageServer extends MessageInterface{
 
 	private ArrayList<Player> players;
 	
-	public MessageServer(String type) {
+	public MessageServer(String type, ArrayList<Player> listPlayers) {
 		super(type);
+		this.players = listPlayers;
 	}
 	
 	private String listPlayers() {
@@ -16,6 +17,14 @@ public class MessageServer extends MessageInterface{
 			players += "," + player;
 		}
 		return players;
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
 	}
 	
 	@Override
