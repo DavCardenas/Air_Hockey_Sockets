@@ -1,6 +1,8 @@
 package logic;
 
-public interface MessageInterface {
+public abstract class MessageInterface {
 
-	public String getMessage();
+	public String getMessage() {
+		return null;
+	}
 }

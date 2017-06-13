@@ -1,8 +1,9 @@
 package logic;
 
-public class MessageClient implements MessageInterface{
+public class MessageClient extends MessageInterface{
 
 	String namePlayer;
+	
 	
 	public MessageClient(String name) {
 		namePlayer = name;

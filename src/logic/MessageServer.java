@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-public class MessageServer implements MessageInterface{
+public class MessageServer extends MessageInterface{
 
 	private ArrayList<Player> players;
 	

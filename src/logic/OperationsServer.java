@@ -47,6 +47,7 @@ public class OperationsServer {
 					try {
 						if (inputStream != null) {
 							message = (Message) inputStream.readObject();
+							
 							if (message != null) {
 								
 								listMessage.add(listMessage.size(), message);
