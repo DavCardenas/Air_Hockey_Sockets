@@ -16,7 +16,7 @@ public class Client{
 	private String ip; // almacena la ip a la cual se conecta
 	private int port; // almacena el puerto al cual se va a conectar
 	private int attemps; // almacena cuantos intentos de conexion llevan
-	private Operations operations; // operacion de lectura y escritura
+	private OperationsClient operations; // operacion de lectura y escritura
 	
 	/**
 	 * Constructor que asigna la direccion y el puerto
@@ -43,7 +43,7 @@ public class Client{
 	public void createConection() {
 		try {
 			clientSocket = new Socket(ip, port);
-			operations = new Operations(clientSocket);
+			operations = new OperationsClient(clientSocket);
 			operations.read();
 			//createDataFlow(); 
 			System.out.println("Conexion creada hacia: " + ip + " en el puerto: " + port);
@@ -83,11 +83,11 @@ public class Client{
 		return clientSocket;
 	}
 	
-	public void setOperations(Operations operations) {
+	public void setOperations(OperationsClient operations) {
 		this.operations = operations;
 	}
 	
-	public Operations getOperations() {
+	public OperationsClient getOperations() {
 		return operations;
 	}
 }

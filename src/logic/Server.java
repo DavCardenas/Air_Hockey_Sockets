@@ -21,9 +21,9 @@ public class Server implements Runnable{
 	private int port; // puerto que abre el servido para que se le conecten
 	private boolean waitConect; // variable que permite controlar cuando escucha o espera una conexion
 	private Thread threadConect; // Hilo en el cual se ejecutara la espera de una nueva conexion
-	private Operations operations; // operaciones de lectura y escritura
+	private OperationsServer operations; // operaciones de lectura y escritura
 	private ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
-	private ArrayList<Operations> drivers; // sirve para controlar cada conexion de entrada
+	private ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
 	private Message messageGlobal; // objeto global de tipo mensaje
 	
@@ -70,7 +70,7 @@ public class Server implements Runnable{
 			System.out.println("Esperando conexion");
 			clientSocket = severSocket.accept();
 			conections.add(clientSocket);
-			operations = new Operations(clientSocket);
+			operations = new OperationsServer(clientSocket);
 			operations.read();
 			waitGame();
 			drivers.add(operations);
@@ -91,18 +91,8 @@ public class Server implements Runnable{
 			@Override
 			public void run() {
 				while(start){
-					for (Operations operation : drivers) {
-						if (!operation.getListMessage().isEmpty()) {
-							for (Message msn : operation.getListMessage()) {
-								if (!msn.isStartGame()) {
-									messageGlobal.addPlayer(msn.getPlayerSelf()); // lo agrega a la lista de jugadores si no lo esta
-									if (msn.isInvitation()) {
-										
-									}
-								}
-								
-							}
-						}
+					for (OperationsServer operation : drivers) {
+						
 					}
 				}
 			}
@@ -133,7 +123,7 @@ public class Server implements Runnable{
 	 * @param p_player jugador al que se le enviara el mensaje
 	 * @param msn mensaje que se desea enviar
 	 */
-	public void writeMessage(Player p_player, Message msn) {
+	public void writeMessage(Player p_player, MessageInterface msn) {
 		drivers.get(findConection(p_player)).write(msn);
 	}
 
@@ -169,11 +159,11 @@ public class Server implements Runnable{
 		return clientSocket;
 	}
 
-	public void setOperations(Operations operations) {
+	public void setOperations(OperationsServer operations) {
 		this.operations = operations;
 	}
 	
-	public Operations getOperations() {
+	public OperationsServer getOperations() {
 		return operations;
 	}
 }

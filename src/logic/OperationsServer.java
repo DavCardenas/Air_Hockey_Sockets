@@ -16,13 +16,13 @@ public class OperationsServer {
 	private MessageInterface message; // mensaje para leer
 	private boolean read; // controla cuando se inicia a leer y cuando se detiene
 	private boolean write; // controla cuando se inicia a escribir y cuando se detiene
-	private ArrayList<Message> listMessage; // lista de mensajes
+	private ArrayList<Player> listPlayers; // lista de jugadores
 	
 	public OperationsServer(Socket socket) {
 		conection = socket;
 		read = true;
 		write = true;
-		listMessage = new ArrayList<>();
+		listPlayers = new ArrayList<>();
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class OperationsServer {
 							if (message != null) {
 								
 								if (message.getType().equals("Inicio")) {
-									
+									listPlayers.add(new Player(message.getMessage(), null));
 								}
 								//listMessage.add(listMessage.size(), message);
 							}

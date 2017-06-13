@@ -18,6 +18,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.Client;
 import logic.Message;
+import logic.MessageClient;
+import logic.MessageInterface;
 import logic.Player;
 
 public class WindowsLoggin extends JFrame{
@@ -184,8 +186,7 @@ public class WindowsLoggin extends JFrame{
 	}
 	
 	public void registerPlayer(Player player) {
-		Message msn = new Message();
-		msn.setPlayerSelf(player);
+		MessageInterface msn = new MessageClient(player.getName(), "Inicio");
 		client.getOperations().write(msn);
 	}
 	
