@@ -1,6 +1,8 @@
 package logic;
 
-public abstract class MessageInterface {
+import java.io.Serializable;
+
+public abstract class MessageInterface implements Serializable{
 	
 	String type; // define que tipo de mensaje es
 	
