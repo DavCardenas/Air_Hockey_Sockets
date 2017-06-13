@@ -12,10 +12,9 @@ public class OperationsClient {
 	private Thread reading; // hilo de lectura
 	private Thread writring; // hilo de escritura
 	private Socket conection; // socket del cual obtendra el flujo de entrada y salida
-	private MessageClient messageClient; // encargado para enviar el nombre del cliente
+	private MessageInterface messageRead; // mensaje para leer
 	private boolean read; // controla cuando se inicia a leer y cuando se detiene
 	private boolean write; // controla cuando se inicia a escribir y cuando se detiene
-	private MessageServer messageServer; // encargado para recibir la lista de jugadores
 		
 
 	/**
@@ -50,10 +49,11 @@ public class OperationsClient {
 				while (read) {
 					try {
 						if (inputStream != null) {
-							messageServer = (MessageServer) inputStream.readObject();
-							if (messageServer != null) {
-								System.out.println(messageServer.getType());
-								System.out.println(messageServer.getMessage());
+							messageRead = (MessageInterface) inputStream.readObject();							
+							if (messageRead != null) {								
+								if (messageRead.getType().equals("Inicio")) {
+									
+								}								
 							}
 						}
 					} catch (ClassNotFoundException | IOException e) {
@@ -88,7 +88,7 @@ public class OperationsClient {
 	 * @param message
 	 *            objeto que se va a enviar
 	 */
-	public synchronized void write(MessageClient message) {
+	public synchronized void write(MessageInterface message) {
 		try {
 			if (outputStream == null) {
 				outputStream = new ObjectOutputStream(
@@ -110,7 +110,7 @@ public class OperationsClient {
 	 * 
 	 * @param message objeto que se va a enviar
 	 */
-	public void alwaysWrite(MessageClient message) {
+	public void alwaysWrite(MessageInterface message) {
 		writring = new Thread(new Runnable() {
 
 			@Override
