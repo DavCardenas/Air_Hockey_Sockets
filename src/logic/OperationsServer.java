@@ -52,6 +52,7 @@ public class OperationsServer {
 								
 								if (message.getType().equals("Inicio")) {
 									listPlayers.add(new Player(message.getMessage(), null));
+									System.out.println(message.getMessage());
 								}
 								//listMessage.add(listMessage.size(), message);
 							}
