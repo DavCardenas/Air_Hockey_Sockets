@@ -17,10 +17,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.Client;
+import logic.DataGameClient;
 import logic.Message;
 import logic.MessageLoginClient;
 import logic.MessageInterface;
 import logic.Player;
+import logic.Singlenton;
 
 public class WindowsLoggin extends JFrame{
 
@@ -49,6 +51,8 @@ public class WindowsLoggin extends JFrame{
 	private GridBagConstraints gbc;
 	private WindowsClient Win_client;
 	
+	private DataGameClient dataGame;
+	
 	public WindowsLoggin() {
 		
 		try {
@@ -73,6 +77,7 @@ public class WindowsLoggin extends JFrame{
 			}
 		
 		gridbag = new GridBagLayout();
+		dataGame = Singlenton.getDataGame();
 		
 		setTitle(TITLE);
 		setLayout(gridbag);
@@ -175,6 +180,7 @@ public class WindowsLoggin extends JFrame{
 		player = new Player();
 		player.setName(name);
 		registerPlayer(player);
+		dataGame.setSelf(player);
 	}
 	
 	/**
