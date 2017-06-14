@@ -64,13 +64,10 @@ public class OperationsServer {
 												invitation.getPlayersVector()[0], invitation.getPlayersVector()[1]);
 										msn.setIsAccept("SI");
 										String ganador = raffleBegin(invitation);
-										System.out.println("GANA LA RIFA: "+ganador);
 										msn.setPlayerBegin(ganador);
-										writeMessage(invitation.getPlayersVector()[1], msn);
-										if(msn.getPlayerBegin().equals(invitation.getPlayersVector()[0])){
-											msn.setIsAccept("BEGIN");
-											writeMessage(invitation.getPlayersVector()[0], msn);											
-										}
+										writeInitGame(msn, invitation.getPlayerInvited());
+										msn.setIsAccept("BEGIN");
+										writeInitGame(msn, invitation.getPlayerClient());
 									} else {
 										MessageInvitationClient msn = new MessageInvitationClient(
 												invitation.getPlayersVector()[0], invitation.getPlayersVector()[1]);
@@ -104,6 +101,16 @@ public class OperationsServer {
 		reading.start();
 		Server.drivers.add(this);
 
+	}
+	
+	/**
+	 * escribirle a un jugador que empiece el juego y envia el ganador
+	 * @param msn
+	 * @param ganador
+	 * @param destino
+	 */
+	private void writeInitGame(MessageInvitationClient msn, String destino){
+		writeMessage(destino, msn);
 	}
 
 	/**

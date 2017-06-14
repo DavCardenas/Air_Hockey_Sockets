@@ -70,7 +70,9 @@ public class OperationsClient {
 									}else if(msn.getIsAccept().equals("NO")){
 										dataGame.setInvitationClient("NO");
 									}else if(msn.getIsAccept().equals("BEGIN")){
-										dataGame.setBegin(true);
+										dataGame.setGame(true);
+										if(msn.getPlayerBegin().equals(msn.getPlayerClient()))
+											dataGame.setBegin(true);
 									} else {										
 										dataGame.setInvitationClient("");
 									}
