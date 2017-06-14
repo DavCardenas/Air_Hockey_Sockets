@@ -180,8 +180,7 @@ public class WindowsLoggin extends JFrame{
 		player = new Player();
 		player.setName(name);
 		registerPlayer(player);
-		//dataGame.setSelf(player);
-		client.setSelf(player);
+		dataGame.setSelf(player);
 		return player;
 	}
 	

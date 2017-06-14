@@ -111,9 +111,10 @@ public class WindowsClient extends JFrame{
 	public void update(ArrayList<Player> players) {
 		model = new DefaultComboBoxModel<>();
 		if(players != null){
-			System.out.println("Tamaño de la lista de jugadores: " + players.size());
 			for (Player player : players) {
-				model.addElement(player);
+				if (!player.getName().equals(dataGame.getSelf().getName())) {
+					model.addElement(player);
+				}
 			}
 		}
 		

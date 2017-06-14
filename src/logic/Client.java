@@ -69,20 +69,6 @@ public class Client{
 	}
 	
 	
-	/**
-	 * @return the self
-	 */
-	public Player getSelf() {
-		return self;
-	}
-
-	/**
-	 * @param self the self to set
-	 */
-	public void setSelf(Player self) {
-		this.self = self;
-	}
-
 	public void closeCon() {
 		try {
 			clientSocket.close();
