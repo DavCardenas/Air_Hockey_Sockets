@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -136,8 +137,15 @@ public class WindowsGame extends JFrame{
 		
 		add(pnl_Information, BorderLayout.NORTH);
 		
-		
+		pnl_Game = new JPanel();
+		pnl_Game.setPreferredSize(new Dimension(WIDTH, 500));
 	}
 	
+	
+	
+	public static void main(String[] args) {
+		WindowsGame g = new WindowsGame();
+		g.setVisible(true);
+	}
 	
 }
