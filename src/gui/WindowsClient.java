@@ -158,15 +158,27 @@ public class WindowsClient extends JFrame {
 						message.setIsAccept("SI");
 						WindowsLoggin.client.getOperations().write(message);
 						dataGame.removeInvitation(dataGame.getInvitations().get(i).getName());
+						minnimizar();
+						createGame();
 					} else {
-						message = new MessageInvitationClient(dataGame.getSelf().getName(), dataGame.getInvitations().get(i).getName());
-						message.setIsAccept("NO");
-						WindowsLoggin.client.getOperations().write(message);
-						dataGame.removeInvitation(dataGame.getInvitations().get(i).getName());
+						respondNo(i);
 					}
 				}
 			}
+		} else {
+			if (dataGame.getInvitations().size() > 0) {
+				for (int i = 0; i < dataGame.getInvitations().size(); i++) {
+					respondNo(i);
+				}
+			}
 		}
+	}
+	
+	private void respondNo(int posicion){
+		MessageInvitationClient message = new MessageInvitationClient(dataGame.getSelf().getName(), dataGame.getInvitations().get(posicion).getName());
+		message.setIsAccept("NO");
+		WindowsLoggin.client.getOperations().write(message);
+		dataGame.removeInvitation(dataGame.getInvitations().get(posicion).getName());
 	}
 
 	/**
