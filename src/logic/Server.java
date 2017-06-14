@@ -76,13 +76,23 @@ public class Server implements Runnable{
 			operations.read();
 			drivers.add(operations);
 			
-			//waitGame();
-			System.out.println("vamos a escribir a los demas");
-			System.out.println("ya paro de escribir");
+			waitGame();
 			System.out.println("Conexion aceptada proveniente de: " + clientSocket.getInetAddress());
 		} catch (IOException e) {
 			System.out.println("Conexion Cerrada");
 		}
+	}
+	
+	/**
+	 *devulve lista de jugadores
+	 */
+	private ArrayList<Player> playerList(){
+		ArrayList<Player> players = new ArrayList<>();
+		for (int i = 0; i < listPlayers.size(); i++) {
+			players.add(listPlayers.get(i));
+		}
+		return players;
+		
 	}
 	
 	/**

@@ -88,17 +88,6 @@ public class OperationsServer {
 		reading.start();
 	}
 	
-	/**
-	 *escribe a todos los driver la lsita de jugadores 
-	 */
-	private void writeAllPlayerList(){
-		for (int i = 0; i < Server.drivers.size(); i++) {
-			System.out.println("jeje "+(i+1));
-			Server.drivers.get(i).write(new MessageListPlayersServer(Server.listPlayers));
-			System.out.println("escribiooo");
-		}
-	}
-	
 
 	/**
 	 * escribe una unica vez
