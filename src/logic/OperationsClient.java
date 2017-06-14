@@ -22,11 +22,12 @@ public class OperationsClient {
 	 * @param socket
 	 *            sirve para alamacenar el socket
 	 */
-	public OperationsClient(Socket socket) {
+	public OperationsClient(Socket socket, Player self) {
 		conection = socket;
 		read = true;
 		write = true;
 		dataGame = Singlenton.getDataGame();
+		dataGame.setSelf(self);
 	}
 
 	/**
@@ -97,6 +98,9 @@ public class OperationsClient {
 						conection.getOutputStream());
 			}
 			System.out.println("Se escribe mensaje tipo:"+message.getType());
+			if(message.getType().equals("Inicio")){
+				dataGame.setSelf(new Player(message.getMessage(), null));
+			}
 			System.out.println("Mesaje: "+message.getMessage());
 			outputStream.writeObject(message);
 

@@ -176,11 +176,13 @@ public class WindowsLoggin extends JFrame{
 	 * crea un jugador logico
 	 * @param name nombre del jugador
 	 */
-	public void createPlayer(String name) {
+	public Player createPlayer(String name) {
 		player = new Player();
 		player.setName(name);
 		registerPlayer(player);
-		dataGame.setSelf(player);
+		//dataGame.setSelf(player);
+		client.setSelf(player);
+		return player;
 	}
 	
 	/**

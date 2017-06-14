@@ -80,6 +80,9 @@ public class OperationsServer {
 		reading.start();
 	}
 	
+	private void writeAll(){
+		
+	}
 	
 
 	/**
