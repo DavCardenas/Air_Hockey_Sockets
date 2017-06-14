@@ -64,12 +64,12 @@ public class OperationsClient {
 									if (msn.getIsAccept().equals("SI")) {
 										dataGame.setInvitationClient("SI");
 										if(msn.getPlayerBegin().equals(msn.getPlayerInvited())){
-											System.out.println("YO DEBO EMPEZAR EL JUEGO");
+											dataGame.setBegin(true);
 										}					
 									}else if(msn.getIsAccept().equals("NO")){
 										dataGame.setInvitationClient("NO");
 									}else if(msn.getIsAccept().equals("BEGIN")){
-										System.out.println("YO DEBO EMPEZAR EL JUEGO");
+										dataGame.setBegin(true);
 									} else {										
 										dataGame.setInvitationClient("");
 									}

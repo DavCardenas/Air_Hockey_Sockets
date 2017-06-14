@@ -31,6 +31,7 @@ public class DataGameClient {
 		invitations = new ArrayList<>();
 		invitationClient = "";
 		isGame = false;
+		isBegin = false;
 	}
 
 	public ArrayList<Player> getPlayerList() {
@@ -70,6 +71,7 @@ public class DataGameClient {
 		
 		if (aux != null) {
 			invitations.remove(aux);
+			System.out.println("Si lo elimino");
 		}
 	}
 	
@@ -134,5 +136,11 @@ public class DataGameClient {
 		this.level = level;
 	}
 	
+	public void setBegin(boolean isBegin) {
+		this.isBegin = isBegin;
+	}
 	
+	public boolean isBegin() {
+		return isBegin;
+	}
 }

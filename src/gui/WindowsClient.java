@@ -99,7 +99,6 @@ public class WindowsClient extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				doInvated(); // hace la invitacion a jugar
 				if (!dataGame.isGame()) {
 					doInvated();
 					waitAnswer();
@@ -125,7 +124,6 @@ public class WindowsClient extends JFrame {
 		//int aux = (int) a.getValue();
 		setTitle("Esperando Respuesta ...");
 		while (!stop) {
-			
 			if (!dataGame.getInvitationClient().isEmpty()) {
 				if (dataGame.getInvitationClient().equals("SI")) {
 					minnimizar();
@@ -137,7 +135,14 @@ public class WindowsClient extends JFrame {
 					dataGame.setInvitationClient("");
 				}
 			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		setTitle("Conectado ....");
 	}
 
 	/**
@@ -146,6 +151,7 @@ public class WindowsClient extends JFrame {
 	public void waitNotification() {
 		int option; // almacena la opcion elegida
 		MessageInvitationClient message; // mensaje que sera enviado
+		System.out.println(dataGame.getInvitations().size() + " !");
 		if (!dataGame.isGame()) {
 			if (dataGame.getInvitations().size() > 0) {
 				for (int i = 0; i < dataGame.getInvitations().size(); i++) {
