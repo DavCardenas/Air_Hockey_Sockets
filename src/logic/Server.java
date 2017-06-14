@@ -76,29 +76,28 @@ public class Server implements Runnable{
 			operations.read();
 			
 			waitGame();
-			//writeAllPlayerList();
 			System.out.println("Conexion aceptada proveniente de: " + clientSocket.getInetAddress());
 		} catch (IOException e) {
 			System.out.println("Conexion Cerrada");
 		}
 	}
 	
-	/**
-	 *escribe a todos los driver la lsita de jugadores 
-	 */
-	private void writeAllPlayerList(){
-		ArrayList<Player> players = new ArrayList<>();
-		for (int i = 0; i < listPlayers.size(); i++) {
-			players.add(listPlayers.get(i));
-		}
-		for (int i = 0; i < drivers.size(); i++) {
-			drivers.get(i).write(new MessageListPlayersServer(players));
-		}
-		
-	}
+//	/**
+//	 *escribe a todos los driver la lsita de jugadores 
+//	 */
+//	private void writeAllPlayerList(){
+//		ArrayList<Player> players = new ArrayList<>();
+//		for (int i = 0; i < listPlayers.size(); i++) {
+//			players.add(listPlayers.get(i));
+//		}
+//		for (int i = 0; i < drivers.size(); i++) {
+//			drivers.get(i).write(new MessageListPlayersServer(players));
+//		}
+//		
+//	}
 	
 	/**
-	 *escribe a todos los driver la lsita de jugadores 
+	 *devulve lista de jugadores
 	 */
 	private ArrayList<Player> playerList(){
 		ArrayList<Player> players = new ArrayList<>();
@@ -121,7 +120,7 @@ public class Server implements Runnable{
 			public void run() {
 				while(start){
 					for (OperationsServer operation : drivers) {
-						writeAllPlayerList();
+						//writeAllPlayerList();
 						operation.write(new MessageListPlayersServer(playerList()));
 						try {
 							Thread.sleep(4000);
