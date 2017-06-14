@@ -1,12 +1,9 @@
 package logic;
 
-import java.awt.im.InputContext;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Clase usada para crear un Servidor 
@@ -26,7 +23,6 @@ public class Server implements Runnable{
 	private ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
 	public static ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
-	private DataGameClient dataGame; // objeto global de tipo mensaje
 	public static ArrayList<Player> listPlayers; // lista de jugadores
 
 	
@@ -45,7 +41,6 @@ public class Server implements Runnable{
 		threadConect = new Thread(this);
 		conections = new ArrayList<Socket>();
 		drivers = new ArrayList<>();
-		dataGame = Singlenton.getDataGame();
 		listPlayers = new ArrayList<>();
 		createServer(); 
 		threadConect.start();
@@ -84,20 +79,7 @@ public class Server implements Runnable{
 		}
 	}
 	
-//	/**
-//	 *escribe a todos los driver la lsita de jugadores 
-//	 */
-//	private void writeAllPlayerList(){
-//		ArrayList<Player> players = new ArrayList<>();
-//		for (int i = 0; i < listPlayers.size(); i++) {
-//			players.add(listPlayers.get(i));
-//		}
-//		for (int i = 0; i < drivers.size(); i++) {
-//			drivers.get(i).write(new MessageListPlayersServer(players));
-//		}
-//		
-//	}
-	
+
 	/**
 	 *devulve lista de jugadores
 	 */
