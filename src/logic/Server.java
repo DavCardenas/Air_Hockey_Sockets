@@ -22,7 +22,7 @@ public class Server implements Runnable{
 	private boolean waitConect; // variable que permite controlar cuando escucha o espera una conexion
 	private Thread threadConect; // Hilo en el cual se ejecutara la espera de una nueva conexion
 	private OperationsServer operations; // operaciones de lectura y escritura
-	private ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
+	private static ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
 	public static ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
 	private DataGameClient dataGame; // objeto global de tipo mensaje
@@ -74,25 +74,14 @@ public class Server implements Runnable{
 			conections.add(clientSocket);
 			operations = new OperationsServer(clientSocket);
 			operations.read();
+			drivers.add(operations);
 			
-			waitGame();
+			//waitGame();
 			System.out.println("vamos a escribir a los demas");
-			writeAllPlayerList();
 			System.out.println("ya paro de escribir");
 			System.out.println("Conexion aceptada proveniente de: " + clientSocket.getInetAddress());
 		} catch (IOException e) {
 			System.out.println("Conexion Cerrada");
-		}
-	}
-	
-	/**
-	 *escribe a todos los driver la lsita de jugadores 
-	 */
-	private void writeAllPlayerList(){
-		for (int i = 0; i < this.drivers.size(); i++) {
-			System.out.println("jeje "+(i+1));
-			this.drivers.get(i).write(new MessageListPlayersServer(listPlayers));
-			System.out.println("escribiooo");
 		}
 	}
 	

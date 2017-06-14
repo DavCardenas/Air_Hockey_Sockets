@@ -96,9 +96,8 @@ public class WindowsClient extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				doInvated(); // hace la invitacion a jugar
-				if (dataGame.isGame()) {
-					minnimizar();
-					createGame();
+				if (!dataGame.isGame()) {
+					waitAnswer();
 				}
 			}
 		});
@@ -112,36 +111,45 @@ public class WindowsClient extends JFrame{
 	 * se mantiene esperando la respuesta del invitado
 	 */
 	public void waitAnswer() {
-		int option = JOptionPane.showConfirmDialog(null, "Esperando Respuesta...");
-		
-		if (option == JOptionPane.OK_OPTION) {
-			
-		}else {
-			
+		boolean stop = false;
+		while (!stop) {
+			JOptionPane.showMessageDialog(this, "Esperando Respuesta..");
+			if (!dataGame.getInvitationClient().isEmpty()) {
+				if (dataGame.getInvitationClient().equals("SI")) {
+					minnimizar();
+					createGame();
+				}else {
+					JOptionPane.showMessageDialog(this, "Intenta con otro jugador...");
+					stop = true;
+				}	
+			}
 		}
 	}
 	
 	/**
 	 * verifica que no tenga solicitudes de juego pendientes
 	 */
-//	public void	waitNotification() {
-//		int option; // alamcena la opcion elegida
-//		MessageInvitationClient message; // mensaje que sera enviado
-//		if (dataGame.isGame()) {
-//			if (dataGame.getInvitations().size() > 0) {
-//				for (Player playerCounter : dataGame.getInvitations()) {
-//					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
-//					if (option == JOptionPane.OK_OPTION) {
-//						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
-//						message.setIsAccept("SI");
-//						WindowsLoggin.client.getOperations().write(message);
-//					}else {
-//						
-//					}
-//				}
-//			}
-//		}
-//	}
+	public void	waitNotification() {
+		int option; // alamcena la opcion elegida
+		MessageInvitationClient message; // mensaje que sera enviado
+		if (dataGame.isGame()) {
+			if (dataGame.getInvitations().size() > 0) {
+				for (Player playerCounter : dataGame.getInvitations()) {
+					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
+					
+					if (option == JOptionPane.OK_OPTION) {
+						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
+						message.setIsAccept("SI");
+						WindowsLoggin.client.getOperations().write(message);
+					}else {
+						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
+						message.setIsAccept("NO");
+						WindowsLoggin.client.getOperations().write(message);
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * envia un mensaje de invitacion al elemento seleccionado en el combobox
