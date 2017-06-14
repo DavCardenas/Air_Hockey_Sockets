@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Random;
 
 public class OperationsServer {
 
@@ -49,10 +50,10 @@ public class OperationsServer {
 
 							if (message != null) {
 								System.out.println("Mensaje del Cliente: " + message.getType());
-								if (message.getType().equals("Inicio")) {
+								if (message.getType().equals("Inicio")) { //mensaje tipo Inicio
 									Server.listPlayers.add(new Player(message.getMessage(), null));
 									System.out.println(message.getMessage());
-								} else if (message.getType().equals("Invitacion")) {
+								} else if (message.getType().equals("Invitacion")) { //mensaje invitacion
 									MessageInvitationClient invitation = (MessageInvitationClient) message;
 									if (invitation.getIsAccept().isEmpty()) {
 										MessageReplicateInvitationServer msn = new MessageReplicateInvitationServer(
@@ -62,7 +63,14 @@ public class OperationsServer {
 										MessageInvitationClient msn = new MessageInvitationClient(
 												invitation.getPlayersVector()[0], invitation.getPlayersVector()[1]);
 										msn.setIsAccept("SI");
+										String ganador = raffleBegin(invitation);
+										System.out.println("GANA LA RIFA: "+ganador);
+										msn.setPlayerBegin(ganador);
 										writeMessage(invitation.getPlayersVector()[1], msn);
+										if(msn.getPlayerBegin().equals(invitation.getPlayersVector()[0])){
+											msn.setIsAccept("BEGIN");
+											writeMessage(invitation.getPlayersVector()[0], msn);											
+										}
 									} else {
 										MessageInvitationClient msn = new MessageInvitationClient(
 												invitation.getPlayersVector()[0], invitation.getPlayersVector()[1]);
@@ -98,6 +106,25 @@ public class OperationsServer {
 
 	}
 
+	/**
+	 * rifa quien es el que comienza, retornando el nombre del jugador
+	 * @param invitation
+	 * @return
+	 */
+	private String raffleBegin(MessageInvitationClient invitation){
+		if(getRandom()>=0.5){
+			return invitation.getPlayerClient();									
+		}else{
+			return invitation.getPlayerInvited();
+		}
+	}
+	/**
+	 * retorna numero aleaotiro entre 0 y 1
+	 * @return
+	 */
+	private double getRandom(){
+		return new Random().nextDouble();
+	}
 	/**
 	 * sirve para encontrar el indice de la lista que corresponde a los
 	 * jugadores para encontrar la misma posicion en la lista de drivers con el

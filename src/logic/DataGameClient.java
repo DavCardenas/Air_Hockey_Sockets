@@ -17,6 +17,7 @@ public class DataGameClient {
 	private boolean isGame; // verifica si el jugador se encuentra jugando
 	private ArrayList<Player> invitations; // jugadores que invitan a este cliente
 	private String invitationClient; // jugador al que el cliente invito (SI-NO)
+	private boolean isBegin; //verifica si el jugador debe empezar el juego
 	
 	private int timeGame; // indica el valor para la barra de tiempo restante (120-0 decreciente)
 	private int level; // indica el nivel en que se encuentra el juego (sube la velocidad por nivel cda 20s)

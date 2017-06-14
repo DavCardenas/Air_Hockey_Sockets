@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Clase usada para crear un Servidor 
@@ -27,6 +28,7 @@ public class Server implements Runnable{
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
 	private DataGameClient dataGame; // objeto global de tipo mensaje
 	public static ArrayList<Player> listPlayers; // lista de jugadores
+
 	
 	
 	/**
@@ -162,6 +164,7 @@ public class Server implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public void setClientSocket(Socket clientSocket) {
 		this.clientSocket = clientSocket;
