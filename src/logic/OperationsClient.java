@@ -63,9 +63,10 @@ public class OperationsClient {
 									MessageInvitationClient msn = (MessageInvitationClient) messageRead;
 									if (msn.getIsAccept().equals("SI")) {
 										dataGame.setInvitationClient("SI");
+										dataGame.setGame(true);
 										if(msn.getPlayerBegin().equals(msn.getPlayerInvited())){
 											dataGame.setBegin(true);
-										}					
+									}					
 									}else if(msn.getIsAccept().equals("NO")){
 										dataGame.setInvitationClient("NO");
 									}else if(msn.getIsAccept().equals("BEGIN")){

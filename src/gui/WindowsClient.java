@@ -117,11 +117,6 @@ public class WindowsClient extends JFrame {
 	 */
 	public void waitAnswer() {
 		boolean stop = false;
-//		JOptionPane a = new JOptionPane("", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION); 
-//				//new JOptionPane("", JOptionPane.INFORMATION_MESSAGE);
-//		a.createDialog(this, "Esperando Respuesta..");
-//		a.setVisible(true);
-		//int aux = (int) a.getValue();
 		setTitle("Esperando Respuesta ...");
 		while (!stop) {
 			if (!dataGame.getInvitationClient().isEmpty()) {
