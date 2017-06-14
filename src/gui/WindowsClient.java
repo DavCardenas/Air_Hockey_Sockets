@@ -158,6 +158,8 @@ public class WindowsClient extends JFrame {
 						message.setIsAccept("SI");
 						WindowsLoggin.client.getOperations().write(message);
 						dataGame.removeInvitation(dataGame.getInvitations().get(i).getName());
+						minnimizar();
+						createGame();
 					} else {
 						respondNo(i);
 					}

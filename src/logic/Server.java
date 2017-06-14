@@ -123,11 +123,13 @@ public class Server implements Runnable{
 				while(start){
 					synchronized(drivers){
 						for (int i = 0; i < drivers.size(); i++) {
-							drivers.get(i).write(new MessageListPlayersServer(playerList()));
-							try {
-								Thread.sleep(4000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+							if(drivers.get(i) != null){
+								drivers.get(i).write(new MessageListPlayersServer(playerList()));
+								try {
+									Thread.sleep(4000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}								
 							}
 						}
 						
