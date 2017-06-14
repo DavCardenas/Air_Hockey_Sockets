@@ -22,7 +22,7 @@ public class Sounds {
 		try{
 			this.clip = AudioSystem.getClip();
 			this.clip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream(this.ruta+archivo+".wav")));
-			this.clip.start();
+			this.clip.loop(1);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
