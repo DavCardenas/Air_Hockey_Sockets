@@ -50,9 +50,10 @@ public class OperationsServer {
 								System.out.println("Mensaje del Cliente: " + message.getType());
 								if (message.getType().equals("Inicio")) {
 									Server.listPlayers.add(new Player(message.getMessage(), null));
-									System.out.println(message.getMessage());
+									System.out.println(message.getMessage());									
+									//alwaysWritePlayers();
+									//write(new MessageListPlayersServer(Server.listPlayers));
 								}
-								write(new MessageListPlayersServer(Server.listPlayers));
 								//listMessage.add(listMessage.size(), message);
 							}
 						}
@@ -78,6 +79,8 @@ public class OperationsServer {
 		});
 
 		reading.start();
+		Server.drivers.add(this);
+
 	}
 	
 	private void writeAll(){
@@ -104,7 +107,46 @@ public class OperationsServer {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * escribe un mensaje constantemente
+	 * 
+	 * @param message objeto que se va a enviar
+	 */
+	public void alwaysWritePlayers() {
+		writring = new Thread(new Runnable() {
 
+			@Override
+			public void run() {
+				try {
+					outputStream = new ObjectOutputStream(
+							conection.getOutputStream());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				while (write) {
+					try {
+						outputStream.writeObject(new MessageListPlayersServer(Server.listPlayers));
+					} catch (IOException e) {
+						closeDataFlowWrite();
+						closeConection();
+						write = false;
+						e.printStackTrace();
+					}
+
+					// ////////////////////////////////////////////////
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					// ///////////////////////////////////////////////
+				}
+			}
+		});
+
+		writring.start();
+	}
 	
 	/**
 	 * escribe un mensaje constantemente
