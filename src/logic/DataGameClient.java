@@ -34,24 +34,26 @@ public class DataGameClient {
 		return playerList;
 	}
 	
-	public ArrayList<Player> getOpponentList() {
-		ArrayList<Player> opponents = new ArrayList<>();
-		for (int i = 0; i < this.playerList.size(); i++) {
-			if(!(this.playerList.get(i).getName().equals(this.self.getName()))){
-				opponents.add(this.playerList.get(i));
-			}
-		}
-		return opponents;
-	}
-	
-	public ArrayList<Player> getInvitations() {
-		return invitations;
-	}
-	
-	public void setInvitations(ArrayList<Player> invitations) {
-		this.invitations = invitations;
-	}
-	
+//	public ArrayList<Player> getOpponentList() {
+//		ArrayList<Player> opponents = new ArrayList<>();
+//		for (int i = 0; i < this.playerList.size(); i++) {
+//			if(!(this.playerList.get(i).getName().equals(this.self.getName()))){
+//				opponents.add(this.playerList.get(i));
+//			}
+//		}
+//		return opponents;
+//	}
+//	
+//	public ArrayList<Player> getInvitations() {
+//		return invitations;
+//	}
+//	
+//	public void setInvitations(ArrayList<Player> invitations) {
+//		this.invitations = invitations;
+//	}
+//	
+//=======
+//
 	public void setPlayerList(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}

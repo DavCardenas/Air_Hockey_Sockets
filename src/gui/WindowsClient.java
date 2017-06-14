@@ -124,24 +124,24 @@ public class WindowsClient extends JFrame{
 	/**
 	 * verifica que no tenga solicitudes de juego pendientes
 	 */
-	public void	waitNotification() {
-		int option; // alamcena la opcion elegida
-		MessageInvitationClient message; // mensaje que sera enviado
-		if (dataGame.isGame()) {
-			if (dataGame.getInvitations().size() > 0) {
-				for (Player playerCounter : dataGame.getInvitations()) {
-					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
-					if (option == JOptionPane.OK_OPTION) {
-						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
-						message.setIsAccept("SI");
-						WindowsLoggin.client.getOperations().write(message);
-					}else {
-						
-					}
-				}
-			}
-		}
-	}
+//	public void	waitNotification() {
+//		int option; // alamcena la opcion elegida
+//		MessageInvitationClient message; // mensaje que sera enviado
+//		if (dataGame.isGame()) {
+//			if (dataGame.getInvitations().size() > 0) {
+//				for (Player playerCounter : dataGame.getInvitations()) {
+//					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
+//					if (option == JOptionPane.OK_OPTION) {
+//						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
+//						message.setIsAccept("SI");
+//						WindowsLoggin.client.getOperations().write(message);
+//					}else {
+//						
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	/**
 	 * envia un mensaje de invitacion al elemento seleccionado en el combobox
@@ -182,9 +182,9 @@ public class WindowsClient extends JFrame{
 			@Override
 			public void run() {
 				while (isUpdateList) {
-					update(dataGame.getOpponentList());
+					update(dataGame.getPlayerList());
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(4000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
