@@ -120,16 +120,15 @@ public class Server implements Runnable{
 			public void run() {
 				while(start){
 					synchronized(drivers){
-						for (OperationsServer operation : drivers) {
-							//writeAllPlayerList();
-							operation.write(new MessageListPlayersServer(playerList()));
+						for (int i = 0; i < drivers.size(); i++) {
+							drivers.get(i).write(new MessageListPlayersServer(playerList()));
 							try {
 								Thread.sleep(4000);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
+						
 					}
 				}
 			}
