@@ -112,8 +112,8 @@ public class WindowsClient extends JFrame{
 	 */
 	public void waitAnswer() {
 		boolean stop = false;
+		JOptionPane.showMessageDialog(this, "Esperando Respuesta..");
 		while (!stop) {
-			JOptionPane.showMessageDialog(this, "Esperando Respuesta..");
 			if (!dataGame.getInvitationClient().isEmpty()) {
 				if (dataGame.getInvitationClient().equals("SI")) {
 					minnimizar();
@@ -218,7 +218,11 @@ public class WindowsClient extends JFrame{
 		this.setExtendedState(ICONIFIED);
 	}
 	
+	/**
+	 * se utiliza para crear un juego 
+	 */
 	public void createGame() {
+		
 		game = new WindowsGame();
 		game.setVisible(true);
 	}
