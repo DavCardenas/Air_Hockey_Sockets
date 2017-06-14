@@ -97,6 +97,7 @@ public class WindowsClient extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				doInvated(); // hace la invitacion a jugar
 				if (!dataGame.isGame()) {
+					doInvated();
 					waitAnswer();
 				}
 			}
@@ -118,9 +119,11 @@ public class WindowsClient extends JFrame{
 				if (dataGame.getInvitationClient().equals("SI")) {
 					minnimizar();
 					createGame();
+					stop = true;
 				}else {
 					JOptionPane.showMessageDialog(this, "Intenta con otro jugador...");
 					stop = true;
+					dataGame.setInvitationClient("");
 				}	
 			}
 		}
@@ -130,9 +133,9 @@ public class WindowsClient extends JFrame{
 	 * verifica que no tenga solicitudes de juego pendientes
 	 */
 	public void	waitNotification() {
-		int option; // alamcena la opcion elegida
+		int option; // almacena la opcion elegida
 		MessageInvitationClient message; // mensaje que sera enviado
-		if (dataGame.isGame()) {
+		if (!dataGame.isGame()) {
 			if (dataGame.getInvitations().size() > 0) {
 				for (Player playerCounter : dataGame.getInvitations()) {
 					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
@@ -141,10 +144,12 @@ public class WindowsClient extends JFrame{
 						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
 						message.setIsAccept("SI");
 						WindowsLoggin.client.getOperations().write(message);
+						dataGame.removeInvitation(playerCounter.getName());
 					}else {
 						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
 						message.setIsAccept("NO");
 						WindowsLoggin.client.getOperations().write(message);
+						dataGame.removeInvitation(playerCounter.getName());
 					}
 				}
 			}
@@ -155,7 +160,7 @@ public class WindowsClient extends JFrame{
 	 * envia un mensaje de invitacion al elemento seleccionado en el combobox
 	 */
 	public void doInvated() {
-		String invited = (String) cbx_players.getSelectedItem(); 
+		String invited = cbx_players.getSelectedItem().toString(); 
 		MessageInvitationClient invitation = new MessageInvitationClient(dataGame.getSelf().getName(), invited);
 		WindowsLoggin.client.getOperations().write(invitation);
 	}
@@ -191,6 +196,7 @@ public class WindowsClient extends JFrame{
 			public void run() {
 				while (isUpdateList) {
 					update(dataGame.getPlayerList());
+					waitNotification();
 					try {
 						Thread.sleep(4000);
 					} catch (InterruptedException e) {
@@ -214,7 +220,7 @@ public class WindowsClient extends JFrame{
 	 * sirve para minimizar la ventana 
 	 */
 	public void minnimizar() {
-		JOptionPane.showMessageDialog(this, "Se ha conectado correctamente");
+		JOptionPane.showMessageDialog(this, "Entrando al Juego");
 		this.setExtendedState(ICONIFIED);
 	}
 	

@@ -119,14 +119,16 @@ public class Server implements Runnable{
 			@Override
 			public void run() {
 				while(start){
-					for (OperationsServer operation : drivers) {
-						//writeAllPlayerList();
-						operation.write(new MessageListPlayersServer(playerList()));
-						try {
-							Thread.sleep(4000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					synchronized(drivers){
+						for (OperationsServer operation : drivers) {
+							//writeAllPlayerList();
+							operation.write(new MessageListPlayersServer(playerList()));
+							try {
+								Thread.sleep(4000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -136,31 +138,6 @@ public class Server implements Runnable{
 		threadGames.start();
 	}
 	
-	/**
-	 * sirve para encontrar el indice de la lista que corresponde
-	 * a los jugadores para encontrar la misma posicion en la lista
-	 * de drivers con el fin de identificar a quien enviar el mensaje
-	 * @param p_player jugador a encontrar
-	 * @return
-	 */
-//	public int findConection(Player p_player) {
-//		int conection = 0;
-//		for (int i = 0; i < dataGame.getPlayers().size(); i++) {
-//			if (dataGame.getPlayers().get(i).equals(p_player)) {
-//				conection = i;
-//			}
-//		}
-//		return conection;
-//	}
-	
-	/**
-	 * escribe un mensaje a una conexion especifica
-	 * @param p_player jugador al que se le enviara el mensaje
-	 * @param msn mensaje que se desea enviar
-	 */
-//	public void writeMessage(Player p_player, MessageInterface msn) {
-//		drivers.get(findConection(p_player)).write(msn);
-//	}
 
 	/**
 	 * Metodo que mantieje ejecutando la escucha
