@@ -56,6 +56,18 @@ public class OperationsClient {
 								if (messageRead.getType().equals("Lista_Jugadores")) {
 									System.out.println("Mensaje del Servidor: " + messageRead.getPlayerList());
 									dataGame.setPlayerList(messageRead.getPlayerList());
+								}else if (messageRead.getType().equals("InvitacionServer")) {
+									MessageReplicateInvitationServer msn = (MessageReplicateInvitationServer) messageRead;
+									dataGame.updateListInvitations(msn.getPlayer());
+								}else if (messageRead.getType().equals("Invitacion")) {
+									MessageInvitationClient msn = (MessageInvitationClient) messageRead;
+									if (msn.getIsAccept().equals("SI")) {
+										dataGame.setInvitationClient("SI");
+									}else if(msn.getIsAccept().equals("NO")){
+										dataGame.setInvitationClient("NO");
+									}else {
+										dataGame.setInvitationClient("");
+									}
 								}								
 							}
 						}

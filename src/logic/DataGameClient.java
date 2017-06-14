@@ -12,7 +12,6 @@ public class DataGameClient {
 
 
 	private ArrayList<Player> playerList; // lista de jugadores conectados
-	
 	private Player self; // jugador
 	private Player counter; // adversario
 	private boolean isGame; // verifica si el jugador se encuentra jugando
@@ -30,6 +29,7 @@ public class DataGameClient {
 		playerList = new ArrayList<>();
 		invitations = new ArrayList<>();
 		invitationClient = "";
+		isGame = false;
 	}
 
 	public ArrayList<Player> getPlayerList() {
@@ -44,6 +44,32 @@ public class DataGameClient {
 			}
 		}
 		return opponents;
+	}
+	
+	/**
+	 * agrega jugadores que invitan al cliente a la lista de invitaciones
+	 * @param player
+	 */
+	public void	 updateListInvitations(Player player) {
+		invitations.add(player);
+	}
+	
+	/**
+	 * elimina una invitacion de la lista
+	 * @param player
+	 */
+	public void removeInvitation(String player) {
+		Player aux = null;
+		
+		for (Player player2 : invitations) {
+			if (player.equals(player2.getName())) {
+				aux = player2;
+			}
+		}
+		
+		if (aux != null) {
+			invitations.remove(aux);
+		}
 	}
 	
 	public String getInvitationClient() {

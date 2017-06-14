@@ -39,6 +39,10 @@ public abstract class MessageInterface implements Serializable{
 		return null;
 	}
 	
+	public String[] getPlayersVector() {
+		return null;
+	}
+	
 	public String getType() {
 		return type;
 	}
