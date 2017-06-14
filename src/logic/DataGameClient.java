@@ -30,7 +30,16 @@ public class DataGameClient {
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
-
+	
+	public ArrayList<Player> getOpponentList() {
+		ArrayList<Player> opponents = new ArrayList<>();
+		for (int i = 0; i < this.playerList.size(); i++) {
+			if(!(this.playerList.get(i).getName().equals(this.self.getName()))){
+				opponents.add(this.playerList.get(i));
+			}
+		}
+		return opponents;
+	}
 	public void setPlayerList(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}

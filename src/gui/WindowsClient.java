@@ -133,8 +133,7 @@ public class WindowsClient extends JFrame{
 			@Override
 			public void run() {
 				while (isUpdateList) {
-					update(dataGame.getPlayerList());
-					
+					update(dataGame.getOpponentList());
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {

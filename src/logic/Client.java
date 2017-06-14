@@ -17,7 +17,7 @@ public class Client{
 	private int port; // almacena el puerto al cual se va a conectar
 	private int attemps; // almacena cuantos intentos de conexion llevan
 	private OperationsClient operations; // operacion de lectura y escritura
-	
+	private Player self;
 	/**
 	 * Constructor que asigna la direccion y el puerto
 	 * 
@@ -32,6 +32,7 @@ public class Client{
 		this.ip = ipDirection;
 		attemps = 1;
 		
+		
 		createConection();
 	}
 	
@@ -43,7 +44,7 @@ public class Client{
 	public void createConection() {
 		try {
 			clientSocket = new Socket(ip, port);
-			operations = new OperationsClient(clientSocket);
+			operations = new OperationsClient(clientSocket, this.self);
 			operations.read();
 			//createDataFlow(); 
 			System.out.println("Conexion creada hacia: " + ip + " en el puerto: " + port);
@@ -67,6 +68,21 @@ public class Client{
 		}
 	}
 	
+	
+	/**
+	 * @return the self
+	 */
+	public Player getSelf() {
+		return self;
+	}
+
+	/**
+	 * @param self the self to set
+	 */
+	public void setSelf(Player self) {
+		this.self = self;
+	}
+
 	public void closeCon() {
 		try {
 			clientSocket.close();
