@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class OperationsServer {
 
@@ -50,14 +49,7 @@ public class OperationsServer {
 								System.out.println("Mensaje del Cliente: " + message.getType());
 								if (message.getType().equals("Inicio")) {
 									Server.listPlayers.add(new Player(message.getMessage(), null));
-									System.out.println(message.getMessage());
-									ArrayList<Player> aux = new ArrayList<>();
-									
-									for (Player player : Server.listPlayers) {
-										aux.add(player);
-									}
-									
-									alwaysWrite(new MessageListPlayersServer(aux));
+									System.out.println(message.getMessage());									
 									//alwaysWritePlayers();
 									//write(new MessageListPlayersServer(Server.listPlayers));
 								}
@@ -86,7 +78,10 @@ public class OperationsServer {
 		});
 
 		reading.start();
+		Server.drivers.add(this);
+
 	}
+
 	
 
 	/**

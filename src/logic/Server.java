@@ -22,7 +22,7 @@ public class Server implements Runnable{
 	private boolean waitConect; // variable que permite controlar cuando escucha o espera una conexion
 	private Thread threadConect; // Hilo en el cual se ejecutara la espera de una nueva conexion
 	private OperationsServer operations; // operaciones de lectura y escritura
-	private static ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
+	private ArrayList<Socket> conections; // vector que almacena los clientes conectados al servidor
 	public static ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
 	private DataGameClient dataGame; // objeto global de tipo mensaje
@@ -74,7 +74,6 @@ public class Server implements Runnable{
 			conections.add(clientSocket);
 			operations = new OperationsServer(clientSocket);
 			operations.read();
-			drivers.add(operations);
 			
 			waitGame();
 			System.out.println("Conexion aceptada proveniente de: " + clientSocket.getInetAddress());
@@ -82,6 +81,20 @@ public class Server implements Runnable{
 			System.out.println("Conexion Cerrada");
 		}
 	}
+	
+//	/**
+//	 *escribe a todos los driver la lsita de jugadores 
+//	 */
+//	private void writeAllPlayerList(){
+//		ArrayList<Player> players = new ArrayList<>();
+//		for (int i = 0; i < listPlayers.size(); i++) {
+//			players.add(listPlayers.get(i));
+//		}
+//		for (int i = 0; i < drivers.size(); i++) {
+//			drivers.get(i).write(new MessageListPlayersServer(players));
+//		}
+//		
+//	}
 	
 	/**
 	 *devulve lista de jugadores
@@ -107,7 +120,14 @@ public class Server implements Runnable{
 			public void run() {
 				while(start){
 					for (OperationsServer operation : drivers) {
-						
+						//writeAllPlayerList();
+						operation.write(new MessageListPlayersServer(playerList()));
+						try {
+							Thread.sleep(4000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
