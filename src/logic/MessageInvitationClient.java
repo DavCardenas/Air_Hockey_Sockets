@@ -2,13 +2,20 @@ package logic;
 
 public class MessageInvitationClient extends MessageInterface{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3299642310666561319L;
+	
 	private String playerClient; // Nombre del Jugador quien hace la invitacion 
-	private String playerInvited; // Nombre del Jugador al cual se va a invitar
+	private String playerInvited; // Nombre del Jugador al cual se va a invitarç
+	private String isAccept; // verifica si la invitacion fue aceptada, inicia en vacio siempre y solo cambia a SI cuando aceptan la partida o a NO cuando la rechazan
 	
 	public MessageInvitationClient(String self, String invited) {
 		super("Invitacion");
 		playerClient = self;
 		playerInvited = invited;
+		isAccept = "";
 	}
 	
 	/**
@@ -36,4 +43,11 @@ public class MessageInvitationClient extends MessageInterface{
 		this.playerInvited = playerInvited;
 	}
 	
+	public String getIsAccept() {
+		return isAccept;
+	}
+	
+	public void setIsAccept(String isAccept) {
+		this.isAccept = isAccept;
+	}
 }

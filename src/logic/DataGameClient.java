@@ -15,6 +15,8 @@ public class DataGameClient {
 	
 	private Player self; // jugador
 	private Player counter; // adversario
+	private boolean isGame; // verifica si el jugador se encuentra jugando
+	private ArrayList<Player> invitations; // jugadores que invitan a este cliente
 	
 	private int timeGame; // indica el valor para la barra de tiempo restante (120-0 decreciente)
 	private int level; // indica el nivel en que se encuentra el juego (sube la velocidad por nivel cda 20s)
@@ -25,6 +27,7 @@ public class DataGameClient {
 		timeGame = 0;
 		level = 1;
 		playerList = new ArrayList<>();
+		invitations = new ArrayList<>();
 	}
 
 	public ArrayList<Player> getPlayerList() {
@@ -40,6 +43,15 @@ public class DataGameClient {
 		}
 		return opponents;
 	}
+	
+	public ArrayList<Player> getInvitations() {
+		return invitations;
+	}
+	
+	public void setInvitations(ArrayList<Player> invitations) {
+		this.invitations = invitations;
+	}
+	
 	public void setPlayerList(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}
@@ -66,6 +78,14 @@ public class DataGameClient {
 
 	public void setTimeGame(int timeGame) {
 		this.timeGame = timeGame;
+	}
+	
+	public boolean isGame() {
+		return isGame;
+	}
+	
+	public void setGame(boolean isGame) {
+		this.isGame = isGame;
 	}
 
 	public int getLevel() {

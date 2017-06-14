@@ -20,6 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.DataGameClient;
 import logic.Message;
+import logic.MessageInvitationClient;
 import logic.Player;
 import logic.Singlenton;
 
@@ -94,14 +95,61 @@ public class WindowsClient extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				minnimizar();
-				createGame();
+				doInvated(); // hace la invitacion a jugar
+				if (dataGame.isGame()) {
+					minnimizar();
+					createGame();
+				}
 			}
 		});
 		gbc = new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0);
 		add(btn_play, gbc);
 		
 		updatePlayerListGraphics();
+	}
+	
+	/**
+	 * se mantiene esperando la respuesta del invitado
+	 */
+	public void waitAnswer() {
+		int option = JOptionPane.showConfirmDialog(null, "Esperando Respuesta...");
+		
+		if (option == JOptionPane.OK_OPTION) {
+			
+		}else {
+			
+		}
+	}
+	
+	/**
+	 * verifica que no tenga solicitudes de juego pendientes
+	 */
+	public void	waitNotification() {
+		int option; // alamcena la opcion elegida
+		MessageInvitationClient message; // mensaje que sera enviado
+		if (dataGame.isGame()) {
+			if (dataGame.getInvitations().size() > 0) {
+				for (Player playerCounter : dataGame.getInvitations()) {
+					option = JOptionPane.showConfirmDialog(this, "Deseas jugar contra: " + playerCounter.getName());
+					if (option == JOptionPane.OK_OPTION) {
+						message = new MessageInvitationClient(dataGame.getSelf().getName(), playerCounter.getName());
+						message.setIsAccept("SI");
+						WindowsLoggin.client.getOperations().write(message);
+					}else {
+						
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * envia un mensaje de invitacion al elemento seleccionado en el combobox
+	 */
+	public void doInvated() {
+		String invited = (String) cbx_players.getSelectedItem(); 
+		MessageInvitationClient invitation = new MessageInvitationClient(dataGame.getSelf().getName(), invited);
+		WindowsLoggin.client.getOperations().write(invitation);
 	}
 	
 	/**

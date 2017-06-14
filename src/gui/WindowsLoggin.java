@@ -35,7 +35,7 @@ public class WindowsLoggin extends JFrame{
 	public static final int HEIGHT = 300;
 	public static final String TITLE = "Ingreso";
 	
-	private Client client;
+	public static Client client;
 	private Player player;
 	
 	private JLabel lb_Title;
