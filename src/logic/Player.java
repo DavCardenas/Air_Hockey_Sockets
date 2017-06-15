@@ -20,6 +20,17 @@ public class Player implements Serializable{
 		name = p_name;
 		position = p_point;
 	}
+	
+	
+
+	/**
+	 * @param name
+	 */
+	public Player(String name) {
+		super();
+		this.name = name;
+		position = null;
+	}
 
 	public String getName() {
 		return name;

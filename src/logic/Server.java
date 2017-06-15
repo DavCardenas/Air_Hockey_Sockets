@@ -24,7 +24,7 @@ public class Server implements Runnable{
 	public static ArrayList<OperationsServer> drivers; // sirve para controlar cada conexion de entrada
 	private Thread threadGames; // sirve para comprobar quien quiere jugar
 	public static ArrayList<Player> listPlayers; // lista de jugadores
-
+	public static ArrayList<Match> listMatchs; //lista de partidas 
 	
 	
 	/**
@@ -44,7 +44,7 @@ public class Server implements Runnable{
 		listPlayers = new ArrayList<>();
 		createServer(); 
 		threadConect.start();
-		
+		listMatchs = new ArrayList<>();
 	}
 	
 	/**
