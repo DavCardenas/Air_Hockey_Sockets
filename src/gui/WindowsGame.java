@@ -14,6 +14,8 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import logic.Player;
+
 
 public class WindowsGame extends JFrame{
 
@@ -34,7 +36,7 @@ public class WindowsGame extends JFrame{
 	
 	
 	private JPanel pnl_Information; // Agrupacion de elementos que informan el estado del juego
-	private JPanel pnl_Game; // contenedor para el tablero de juego 
+	private PaneGame pnl_Game; // contenedor para el tablero de juego 
 	
 	private JLabel lb_Player_1; // almacena el nombre del jugador
 	private JLabel lb_Player_2;
@@ -108,6 +110,7 @@ public class WindowsGame extends JFrame{
 		pnl_Information.add(lb_time, gbc);
 		
 		time = new JProgressBar(0, 120);
+		time.setValue(120);
 		gbc = new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0);
 		pnl_Information.add(time, gbc);
 		
@@ -135,11 +138,29 @@ public class WindowsGame extends JFrame{
 		
 		add(pnl_Information, BorderLayout.NORTH);
 		
-		pnl_Game = new JPanel();
-		pnl_Game.setPreferredSize(new Dimension(WIDTH, 500));
+		pnl_Game = new PaneGame(this);
 	}
 	
-	
+	/**
+	 * actualiza la informacion del juego 
+	 * @param playerBlue
+	 * @param playerRed
+	 * @param level
+	 * @param timeRest
+	 */
+	public void updatePaneInformation(Player playerBlue, Player playerRed, int level, int timeRest) {
+		// jugador 1
+		lb_Player_1.setText(NAME + playerBlue.getName());
+		lb_Goals_1.setText(GOALS + playerBlue.getGoals());
+		lb_Score_1.setText(SCORE + playerBlue.getPoints());
+		// jugador 2
+		lb_Player_2.setText(NAME + playerRed.getName());
+		lb_Goals_2.setText(GOALS + playerRed.getGoals());
+		lb_Score_2.setText(SCORE + playerRed.getPoints());
+		// nivel y tiempo restante
+		lb_level.setText(LEVEL + level);
+		time.setValue(timeRest);
+	}
 	
 	public static void main(String[] args) {
 		WindowsGame g = new WindowsGame();

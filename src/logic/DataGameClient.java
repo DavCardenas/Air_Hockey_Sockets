@@ -1,5 +1,6 @@
 package logic;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +15,7 @@ public class DataGameClient {
 	private ArrayList<Player> playerList; // lista de jugadores conectados
 	private Player self; // jugador
 	private Player counter; // adversario
+	private Point disc; // disco
 	private boolean isGame; // verifica si el jugador se encuentra jugando
 	private ArrayList<Player> invitations; // jugadores que invitan a este cliente
 	private String invitationClient; // jugador al que el cliente invito (SI-NO)
@@ -32,6 +34,7 @@ public class DataGameClient {
 		invitationClient = "";
 		isGame = false;
 		isBegin = false;
+		disc = new Point();
 	}
 
 	public ArrayList<Player> getPlayerList() {
@@ -73,6 +76,14 @@ public class DataGameClient {
 			invitations.remove(aux);
 			System.out.println("Si lo elimino");
 		}
+	}
+	
+	public Point getDisc() {
+		return disc;
+	}
+	
+	public void setDisc(Point disc) {
+		this.disc = disc;
 	}
 	
 	public String getInvitationClient() {
