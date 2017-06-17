@@ -184,15 +184,10 @@ public class Match implements Runnable{
 
 	@Override
 	public void run() {
-		while (isGame) {
+		while (isGame) {			
+			writePlayers();		
 			
-			writePlayers();
-			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			sleepMe(100);
 			
 			if(this.timeLeft>0)
 				this.timeLeft--;
@@ -205,6 +200,14 @@ public class Match implements Runnable{
 			System.out.println("GANA Jugador: "+this.playerLeft.getName());
 		else
 			System.out.println("GANA Jugador: "+this.playerRigth.getName());
+	}
+	
+	private void sleepMe(int time){
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
