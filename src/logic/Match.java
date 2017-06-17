@@ -7,11 +7,11 @@ import gui.WindowsGame;
 public class Match implements Runnable{
 	
 	public static final int TOTAL__TIME_VALUE = 120; // TIEMPO TOTAL DE LA PARTIDA EN SEGUNDOS
+	public static final int RANGE_CENTER = 100; //rango que tendra el disk con respecto al centro
 	public static final int X_POSITION_INITIAL_PLAYER_LEFT = 15; //posicion inicial en x para el jugador izquierda
-	public static final int X_POSITION_INITIAL_PLAYER_RIGTH = WindowsGame.WIDTH - X_POSITION_INITIAL_PLAYER_LEFT; //posicion en x para el jugador derecha
+	public static final int X_POSITION_INITIAL_PLAYER_RIGTH = WindowsGame.WIDTH - RANGE_CENTER; //posicion en x para el jugador derecha
 	public static final int Y_POSITION_INITIAL = WindowsGame.HEIGHT /2; //posicion inicial para todos en y
-	public static final int RANGE_CENTER = 30; //rango que tendra el mazo con respecto al centro
-	public static final int X_POSITION_INITIAL_disk_LEFT = (WindowsGame.WIDTH /2)-RANGE_CENTER; //posicion inicial x cuando empieza izquierrda
+	public static final int X_POSITION_INITIAL_DISK_LEFT = (WindowsGame.WIDTH /2)-RANGE_CENTER; //posicion inicial x cuando empieza izquierrda
 	
 	private Player playerLeft; //jugador de la izquierda
 	private Player playerRigth; //jugador de la derecha
@@ -95,7 +95,7 @@ public class Match implements Runnable{
 	 * siempre al lado izquierdo
 	 */
 	private void createdisk(){
-		this.disk = new Point(X_POSITION_INITIAL_PLAYER_LEFT, Y_POSITION_INITIAL);
+		this.disk = new Point(X_POSITION_INITIAL_DISK_LEFT, Y_POSITION_INITIAL);
 	}
 
 	/**
