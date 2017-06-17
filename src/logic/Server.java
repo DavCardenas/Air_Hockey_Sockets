@@ -113,8 +113,13 @@ public class Server implements Runnable{
 									e.printStackTrace();
 								}								
 							}
+						}					
+					}
+					synchronized(listMatchs){
+						for (int i = 0; i < listMatchs.size(); i++) {					
+							System.out.println("Ya hay partido");
+							System.out.println(listMatchs.get(i).getPlayerBegin());
 						}
-						
 					}
 				}
 			}
@@ -147,6 +152,26 @@ public class Server implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * sirve para encontrar el indice de la lista que corresponde a los
+	 * jugadores para encontrar la misma posicion en la lista de drivers con el
+	 * fin de identificar a quien enviar el mensaje
+	 * 
+	 * @param p_player
+	 *            jugador a encontrar
+	 * @return
+	 */
+	public int findConection(String p_player) {
+		int conection = 0;
+		for (int i = 0; i < Server.listPlayers.size(); i++) {
+			if (Server.listPlayers.get(i).getName().equals(p_player)) {
+				conection = i;
+			}
+		}
+		return conection;
+	}
+
 	
 	
 	public void setClientSocket(Socket clientSocket) {
