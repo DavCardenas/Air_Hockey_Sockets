@@ -3,10 +3,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,18 +18,41 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import logic.DataGameClient;
 import logic.Player;
+import logic.Singlenton;
 
 
-public class WindowsGame extends JFrame{
+public class WindowsGame extends JFrame implements Runnable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5440988445348282291L;
 
+	private Image table; // almacena la imagen del tablero
+	private Image disc; // almacena la imagen del disco
+	private Image playerBlue; // almacena la imagen del martillo azul
+	private Image playerRed; // almacena la imagen del martillo rojo
+	
+	private Thread paintGame; // hilo que mantiene pintanto los componentes
+	private boolean isPaint; // controla el hilo para detener o iniciar
+	
+	private DataGameClient dataGame; // elemento que contiene toda la informacion del juego
+	
+	public static final int PLAYER_HEIGHT = 70; // Alto del jugador
+	public static final int PLAYER_WIDTH = 72; // Ancho del jugador
+	public static final int DISC_TAM = 47; // ancho y alto del disco;
+	public static final int TABLE_HEIGHT = 500; // Alto del tablero
+	public static final int TABLE_WIDTH = 1000; // ancho del Tablero
+	
+	public static final String PATH_TABLE = "/images/table.png"; // ruta donde esta la imagen del tablero
+	public static final String PATH_DISC = "/images/disc.png"; // ruta donde esta la imagen deel disco
+	public static final String PATH_PLAYER_BLUE = "/images/paddleBlue.png"; // ruta donde esta la imagen del martillo azul
+	public static final String PATH_PLAYER_RED = "/images/paddleRed.png"; // ruto donde esta la imagen del martillo rojo
+	
 	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 600;
+	public static final int HEIGHT = 630;
 	
 	public static final String NAME = "Nombre: ";
 	public static final String SCORE = "Puntaje: ";
@@ -36,7 +63,6 @@ public class WindowsGame extends JFrame{
 	
 	
 	private JPanel pnl_Information; // Agrupacion de elementos que informan el estado del juego
-	private PaneGame pnl_Game; // contenedor para el tablero de juego 
 	
 	private JLabel lb_Player_1; // almacena el nombre del jugador
 	private JLabel lb_Player_2;
@@ -77,6 +103,13 @@ public class WindowsGame extends JFrame{
 			}
 		
 		gridbag = new GridBagLayout();
+		table = new ImageIcon(getClass().getResource(PATH_TABLE)).getImage();
+		disc = new ImageIcon(getClass().getResource(PATH_DISC)).getImage();
+		playerBlue = new ImageIcon(getClass().getResource(PATH_PLAYER_BLUE)).getImage();
+		playerRed = new ImageIcon(getClass().getResource(PATH_PLAYER_RED)).getImage();
+		isPaint = false;
+		
+		dataGame = Singlenton.getDataGame();
 		
 		setTitle(TITLE);
 		setLayout(new BorderLayout());
@@ -138,8 +171,6 @@ public class WindowsGame extends JFrame{
 		
 		add(pnl_Information, BorderLayout.NORTH);
 		
-		pnl_Game = new PaneGame(this);
-		pnl_Game.startPaint();
 	}
 	
 	/**
@@ -163,9 +194,86 @@ public class WindowsGame extends JFrame{
 		time.setValue(timeRest);
 	}
 	
+	/**
+	 * metodo que pinta los componentes del programa
+	 * @param g
+	 */
+	public void paintComp(Graphics g, Point positionDisc, Point positionPlayerB, Point positionPlayerR) {
+		// se pinta primero el tablero con el fin de que quede por debajo de todos los demas elementos
+		g.drawImage(table, 0, 130, TABLE_WIDTH, TABLE_HEIGHT, null);
+		// pintar la pelota
+		//g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
+		// pintar un jugador
+		//g.drawImage(playerBlue, positionPlayerB.x, positionPlayerB.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		// pintar el segundo jugador
+		//g.drawImage(playerRed, positionPlayerR.x, positionPlayerR.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		
+	}
+	
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		Point disc = null;
+		Point playerBlue = null;
+		Point playerRed =  null;
+		
+//		disc = dataGame.getDisc();
+//		if (dataGame.isBegin()) {
+//			playerBlue = dataGame.getSelf().getPosition();
+//			playerRed = dataGame.getCounter().getPosition();
+//		}else {
+//			playerBlue = dataGame.getCounter().getPosition();
+//			playerRed = dataGame.getSelf().getPosition();
+//		}
+		
+		paintComp(g, disc, playerBlue, playerRed);
+	}
+	
+	/**
+	 * inicia el hilo de pintado
+	 */
+	public void startPaint() {
+		paintGame = new Thread(this);
+		isPaint = true;
+		paintGame.start();
+	}
+	
+	/**
+	 * detiene la ejecucion del hilo de pintado
+	 */
+	public void stopPaint() {
+		isPaint = false;
+	}
+	
 	public static void main(String[] args) {
 		WindowsGame g = new WindowsGame();
 		g.setVisible(true);
+	}
+
+	@Override
+	public void run() {
+		
+		while (isPaint) {
+//			disc = dataGame.getDisc();
+//			if (dataGame.isBegin()) {
+//				playerBlue = dataGame.getSelf().getPosition();
+//				playerRed = dataGame.getCounter().getPosition();
+//			}else {
+//				playerBlue = dataGame.getCounter().getPosition();
+//				playerRed = dataGame.getSelf().getPosition();
+//			}
+			//Graphics2D graphics = (Graphics2D) this.getGraphics();
+			//paintComp(new MyGraphics().getGraphics(), disc, playerBlue, playerRed);
+			//paintComp(getContentPane().getGraphics(), null, null, null);
+			//windows.updatePaneInformation(dataGame.getSelf(), dataGame.getCounter(), dataGame.getLevel(), dataGame.getTimeGame());
+			repaint();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }
