@@ -107,20 +107,41 @@ public class Server implements Runnable{
 						for (int i = 0; i < drivers.size(); i++) {
 							if(drivers.get(i) != null){
 								drivers.get(i).write(new MessageListPlayersServer(playerList()));
-								try {
-									Thread.sleep(4000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}								
+								sleepMe(4000);
 							}
+						}					
+					}
+					synchronized(listMatchs){
+						for (int i = 0; i < listMatchs.size(); i++) {					
+//							System.out.println("Ya hay partido");
+//							System.out.println("Ganador saque: "+listMatchs.get(i).getPlayerBegin());
+//							System.out.println("Izquieda: "+listMatchs.get(i).getPlayerLeft().getName());
+//							System.out.println("Conexion Izquierda "+listMatchs.get(i).getClientLeft());
+//							System.out.println("Derecha: "+listMatchs.get(i).getPlayerRigth().getName());
+//							System.out.println("Conexion Derecha "+listMatchs.get(i).getClientRigth());
+//							System.out.println("Mazo: "+listMatchs.get(i).getDisk().getX()+" - "+listMatchs.get(i).getDisk().getY());
+							listMatchs.get(i).writePlayers();
+							sleepMe(100);
+
 						}
-						
 					}
 				}
 			}
 		});			
 		
 		threadGames.start();
+	}
+	
+	/**
+	 * sleep
+	 * @param time
+	 */
+	private void sleepMe(int time){
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 

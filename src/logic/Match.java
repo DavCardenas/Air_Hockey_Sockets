@@ -12,82 +12,89 @@ public class Match {
 	public static final int Y_POSITION_INITIAL = MAXIMUM_HEIGHT/2; //posicion inicial para todos en y
 	public static final int RANGE_CENTER = 100; //rango que tendra el mazo con respecto al centro
 	public static final int X_POSITION_INITIAL_disk_LEFT = (MAXIMUM_WIDTH/2)-RANGE_CENTER; //posicion inicial x cuando empieza izquierrda
-	public static final int X_POSITION_INITIAL_disk_RIGTH = (MAXIMUM_WIDTH/2)+RANGE_CENTER; //posicion inicial x cuando empieza derecha
-	
 	
 	private Player playerLeft; //jugador de la izquierda
 	private Player playerRigth; //jugador de la derecha
 	private Point disk; //disco
 	private int timeLeft; //tiempo restante
 	private String playerBegin; //nombre del jugador que  inicia
-	
+//<<<<<<< HEAD
+//	
+//=======
+//	private OperationsServer clientLeft;
+//	private OperationsServer clientRigth;
+//>>>>>>> branch 'master' of https://github.com/DavCardenas/Air_Hockey_Sockets.git
 	/**
 	 * @param playerLeft
 	 * @param playerRigth
 	 */
-	public Match(String namePlayerLeft, String namePlayerRigth, String playerBegin) {
-		super();
-		this.playerLeft = new Player(namePlayerLeft);
-		this.playerRigth = new Player(namePlayerRigth);
+	public Match(String player1, String player2, String playerBegin) {
+		super();		
 		this.playerBegin = playerBegin;
 		this.timeLeft = TOTAL__TIME_VALUE;
+		//this.clientLeft = null;
+		//this.clientRigth = null;
+		this.assignInitialPosition(player1, player2);
 		
-		this.assignInitialPosition();				
+	}
+	
+	/**
+	 * metodo para esribir a jugadores
+	 */
+	public void writePlayers(){
+		MessageMatch match = new MessageMatch(this.playerLeft, this.playerRigth, this.disk);
+		this.clientLeft.write(match);
+		this.clientRigth.write(match);
 	}
 	
 	/**
 	 *metodo encarga de asignar las posiciones inciales de los demas 
 	 */
-	private void assignInitialPosition(){
-		this.assignInitialPositionPlayerLeft();
-		this.assignInitialPositionPlayerRigth();
+	private void assignInitialPosition(String player1, String player2){
+		if(player1.equals(this.playerBegin)){
+			this.assignInitialPositionPlayerLeft(player1);	
+			this.assignInitialPositionPlayerRigth(player2);
+		} else {
+			this.assignInitialPositionPlayerLeft(player2);	
+			this.assignInitialPositionPlayerRigth(player1);		
+		}
 		this.createdisk();
 	}
 	
 	/**
 	 * JUGADOR DE LA IZQUIERDA ASIGNAR LA POSICION 
 	 */
-	private void assignInitialPositionPlayerLeft(){
+	private void assignInitialPositionPlayerLeft(String namePlayer){
+		this.playerLeft = new Player(namePlayer);
 		this.playerLeft.setPosition(new Point(X_POSITION_INITIAL_PLAYER_LEFT, Y_POSITION_INITIAL));
 	}
 	
 	/**
 	 * JUGADOR DE LA IZQUIERDA ASIGNAR LA POSICION 
 	 */
-	private void assignInitialPositionPlayerRigth(){
-		this.playerLeft.setPosition(new Point(X_POSITION_INITIAL_PLAYER_RIGTH, Y_POSITION_INITIAL));
+	private void assignInitialPositionPlayerRigth(String namePlayer){
+		this.playerRigth = new Player(namePlayer);
+		this.playerRigth.setPosition(new Point(X_POSITION_INITIAL_PLAYER_RIGTH, Y_POSITION_INITIAL));
 	}
 	/**
 	 * metodo para crear y asignar posiciones iniciales al mazo
-	 * 
+	 * siempre al lado izquierdo
 	 */
 	private void createdisk(){
-		if(isBeginPlayerLeft()){
-			this.disk = new Point(X_POSITION_INITIAL_PLAYER_LEFT, Y_POSITION_INITIAL);
-		} else {
-			this.disk = new Point(X_POSITION_INITIAL_disk_RIGTH, Y_POSITION_INITIAL);
-		}
-	}
-	
-	/**
-	 * metodo para verificar si el que comienza es el jugador de la izquierda
-	 * @return
-	 */
-	private boolean isBeginPlayerLeft(){
-		return this.playerLeft.getName().equals(this.playerBegin);
+		this.disk = new Point(X_POSITION_INITIAL_PLAYER_LEFT, Y_POSITION_INITIAL);
 	}
 
 	/**
 	 * @return the disk
 	 */
-	public Point getdisk() {
+	public Point getDisk() {
 		return disk;
 	}
 
 	/**
 	 * @param disk the disk to set
 	 */
-	public void setdisk(Point disk) {
+	public void setDisk(Point disk) {
 		this.disk = disk;
 	}
 
@@ -132,6 +139,35 @@ public class Match {
 	public Player getPlayerRigth() {
 		return playerRigth;
 	}
+
+	/**
+	 * @return the clientLeft
+	 */
+	public OperationsServer getClientLeft() {
+		return clientLeft;
+	}
+
+	/**
+	 * @param clientLeft the clientLeft to set
+	 */
+	public void setClientLeft(OperationsServer clientLeft) {
+		this.clientLeft = clientLeft;
+	}
+
+	/**
+	 * @return the clientRigth
+	 */
+	public OperationsServer getClientRigth() {
+		return clientRigth;
+	}
+
+	/**
+	 * @param clientRigth the clientRigth to set
+	 */
+	public void setClientRigth(OperationsServer clientRigth) {
+		this.clientRigth = clientRigth;
+	}
+
 	
 	
 }
