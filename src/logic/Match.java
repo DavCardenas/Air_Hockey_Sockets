@@ -56,7 +56,7 @@ public class Match implements Runnable{
 	 * metodo para esribir a jugadores
 	 */
 	public void writePlayers(){
-		MessageMatch match = new MessageMatch(this.playerLeft, this.playerRigth, this.disk);
+		MessageMatch match = new MessageMatch(this.playerLeft, this.playerRigth, this.disk, this.isGame, this.timeLeft);
 		this.clientLeft.write(match);
 		this.clientRigth.write(match);
 	}
@@ -193,7 +193,25 @@ public class Match implements Runnable{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			if(this.timeLeft>0)
+				this.timeLeft--;
+			else
+				isGame=false;
 		}
+		if(this.playerLeft.getPoints() == this.playerRigth.getPoints())
+			System.out.println("EMPATE");
+		else if(this.playerLeft.getPoints() > this.playerRigth.getPoints())
+			System.out.println("GANA Jugador: "+this.playerLeft.getName());
+		else
+			System.out.println("GANA Jugador: "+this.playerRigth.getName());
+	}
+
+	/**
+	 * @return the isGame
+	 */
+	public boolean isGame() {
+		return isGame;
 	}
 
 	
