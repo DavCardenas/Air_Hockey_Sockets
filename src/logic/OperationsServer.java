@@ -79,6 +79,8 @@ public class OperationsServer {
 										msn.setIsAccept("NO");
 										writeMessage(invitation.getPlayersVector()[1], msn);
 									}
+								}else if (message.getType().equals("Match_Client")) {
+									System.out.println("algo tiene que hacer");
 								}
 							}
 						}

@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.DataGameClient;
+import logic.MessageMatchClient;
 import logic.Player;
 import logic.Singlenton;
 
@@ -204,14 +205,16 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 	 * @param g
 	 */
 	public void paintComp(Graphics g, Point positionDisc, Point positionPlayerB, Point positionPlayerR) {
+		int aux_X = PLAYER_WIDTH/2;
+		int aux_Y = PLAYER_HEIGHT/2;
 		// se pinta primero el tablero con el fin de que quede por debajo de todos los demas elementos
 		g.drawImage(table, 0, 130, TABLE_WIDTH, TABLE_HEIGHT, null);
 		// pintar la pelota
 		g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
 		// pintar un jugador
-		g.drawImage(playerBlue, positionPlayerB.x, positionPlayerB.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerBlue, positionPlayerB.x + aux_X, positionPlayerB.y + aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		// pintar el segundo jugador
-		g.drawImage(playerRed, positionPlayerR.x, positionPlayerR.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerRed, positionPlayerR.x + aux_X, positionPlayerR.y + aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		
 	}
 	
@@ -268,6 +271,42 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 			}
 		}
 	}
+	
+	/**
+	 * controla los limites de movimiento del jugador
+	 * @param e
+	 */
+	public void controlMove(MouseEvent e) {
+		Point pointPlayer;
+		int aux_X = PLAYER_WIDTH/2;
+		int aux_Y = PLAYER_HEIGHT/2;
+		
+		if (dataGame.isBegin()) { // si el es el azul
+			if (e.getX() + aux_X > 0 && e.getX() + aux_X < TABLE_WIDTH/2) {
+				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
+					pointPlayer = new Point(e.getX(), e.getY());  // cambia la posicion
+				}else {
+					pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
+				}
+			}else {
+				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
+			}
+		}else { // si es el rojo
+			if (e.getX() + aux_X > TABLE_WIDTH/2 && e.getX() + aux_X < TABLE_WIDTH) {
+				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
+					pointPlayer = new Point(e.getX(), e.getY()); // cambia la posicion
+				}else {
+					pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
+				}
+			}else {
+				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
+			}
+		}
+		dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
+		MessageMatchClient msn = new MessageMatchClient(); // crea el mensaje a enviar
+		msn.setPlayer(dataGame.getSelf()); // asigna el contenido al mensaje
+		WindowsLoggin.client.getOperations().write(msn); // envia el mensaje al servidor
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -276,9 +315,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Point pointPlayer = new Point(e.getX(), e.getY());
-		dataGame.getSelf().setPosition(pointPlayer);
-		dataGame.getOperations().write(null); // crear el mensaje a enviar
+		controlMove(e);
 	}
 	
 }

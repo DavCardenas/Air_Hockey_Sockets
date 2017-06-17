@@ -20,7 +20,6 @@ public class DataGameClient {
 	private ArrayList<Player> invitations; // jugadores que invitan a este cliente
 	private String invitationClient; // jugador al que el cliente invito (SI-NO)
 	private boolean isBegin; //verifica si el jugador debe empezar el juego
-	private OperationsClient operations; // operaciones del cliente hacia el servidor
 	
 	private int timeGame; // indica el valor para la barra de tiempo restante (120-0 decreciente)
 	private int level; // indica el nivel en que se encuentra el juego (sube la velocidad por nivel cda 20s)
@@ -36,15 +35,6 @@ public class DataGameClient {
 		isGame = false;
 		isBegin = false;
 		disc = new Point();
-		operations = null;
-	}
-	
-	public OperationsClient getOperations() {
-		return operations;
-	}
-	
-	public void setOperations(OperationsClient operations) {
-		this.operations = operations;
 	}
 
 	public ArrayList<Player> getPlayerList() {
