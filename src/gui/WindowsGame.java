@@ -278,7 +278,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 	public void mouseMoved(MouseEvent e) {
 		Point pointPlayer = new Point(e.getX(), e.getY());
 		dataGame.getSelf().setPosition(pointPlayer);
-		System.out.println("Actualizando informacion");
+		dataGame.getOperations().write(null); // crear el mensaje a enviar
 	}
 	
 }
