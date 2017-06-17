@@ -71,6 +71,7 @@ public class OperationsServer {
 										Match match = new Match(invitation.getPlayerInvited(), invitation.getPlayerClient(), msn.getPlayerBegin());
 										match.setClientLeft(Server.drivers.get(findConection(match.getPlayerLeft().getName())));
 										match.setClientRigth(Server.drivers.get(findConection(match.getPlayerRigth().getName())));
+										match.startGame();
 										Server.listMatchs.add(match);
 									} else {
 										MessageInvitationClient msn = new MessageInvitationClient(

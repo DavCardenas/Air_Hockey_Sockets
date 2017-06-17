@@ -2,7 +2,7 @@ package logic;
 
 import java.awt.Point;
 
-public class Match {
+public class Match implements Runnable{
 	
 	public static final int TOTAL__TIME_VALUE = 120; // TIEMPO TOTAL DE LA PARTIDA EN SEGUNDOS
 	public static final int MAXIMUM_WIDTH = 1000; //ANCHO MAXIMO
@@ -20,6 +20,8 @@ public class Match {
 	private String playerBegin; //nombre del jugador que  inicia
 	private OperationsServer clientLeft;
 	private OperationsServer clientRigth;
+	private Thread game; // hilo que controla el juego
+	private boolean isGame; // controla si se esta en juego o no.
 
 	/**
 	 * @param playerLeft
@@ -32,7 +34,22 @@ public class Match {
 		this.clientLeft = null;
 		this.clientRigth = null;
 		this.assignInitialPosition(player1, player2);
-		
+		isGame = true;
+		game = new Thread(this);
+	}
+	
+	/**
+	 * detiene el juego
+	 */
+	public void stopGame() {
+		isGame = false;
+	}
+	
+	/**
+	 * inicia el hilo del juego
+	 */
+	public void startGame() {
+		game.start();
 	}
 	
 	/**
@@ -163,6 +180,20 @@ public class Match {
 	 */
 	public void setClientRigth(OperationsServer clientRigth) {
 		this.clientRigth = clientRigth;
+	}
+
+	@Override
+	public void run() {
+		while (isGame) {
+			
+			writePlayers();
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	

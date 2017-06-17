@@ -111,20 +111,6 @@ public class Server implements Runnable{
 							}
 						}					
 					}
-					synchronized(listMatchs){
-						for (int i = 0; i < listMatchs.size(); i++) {					
-//							System.out.println("Ya hay partido");
-//							System.out.println("Ganador saque: "+listMatchs.get(i).getPlayerBegin());
-//							System.out.println("Izquieda: "+listMatchs.get(i).getPlayerLeft().getName());
-//							System.out.println("Conexion Izquierda "+listMatchs.get(i).getClientLeft());
-//							System.out.println("Derecha: "+listMatchs.get(i).getPlayerRigth().getName());
-//							System.out.println("Conexion Derecha "+listMatchs.get(i).getClientRigth());
-//							System.out.println("Mazo: "+listMatchs.get(i).getDisk().getX()+" - "+listMatchs.get(i).getDisk().getY());
-							listMatchs.get(i).writePlayers();
-							sleepMe(100);
-
-						}
-					}
 				}
 			}
 		});			
