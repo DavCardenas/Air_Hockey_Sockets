@@ -62,6 +62,19 @@ public class Match implements Runnable{
 	}
 	
 	/**
+	 * permite cambiar la posicion de un jugador
+	 * @param p_name
+	 * @param point
+	 */
+	public void changePosition(String p_name, Point point) {
+		if (playerLeft.getName().equals(p_name)) {
+			playerLeft.setPosition(point);
+		}else if(playerRigth.getName().equals(p_name)){
+			playerRigth.setPosition(point);
+		}
+	}
+	
+	/**
 	 * metodo para esribir a jugadores
 	 */
 	public void writePlayers(){

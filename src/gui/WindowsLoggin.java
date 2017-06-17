@@ -18,7 +18,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.Client;
 import logic.DataGameClient;
-import logic.Message;
 import logic.MessageLoginClient;
 import logic.MessageInterface;
 import logic.Player;

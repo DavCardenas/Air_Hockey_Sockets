@@ -1,5 +1,6 @@
 package logic;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -50,4 +51,5 @@ public abstract class MessageInterface implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+
 }
