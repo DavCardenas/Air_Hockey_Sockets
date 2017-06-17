@@ -18,12 +18,9 @@ public class Match {
 	private Point disk; //disco
 	private int timeLeft; //tiempo restante
 	private String playerBegin; //nombre del jugador que  inicia
-//<<<<<<< HEAD
-//	
-//=======
-//	private OperationsServer clientLeft;
-//	private OperationsServer clientRigth;
-//>>>>>>> branch 'master' of https://github.com/DavCardenas/Air_Hockey_Sockets.git
+	private OperationsServer clientLeft;
+	private OperationsServer clientRigth;
+
 	/**
 	 * @param playerLeft
 	 * @param playerRigth
@@ -32,8 +29,8 @@ public class Match {
 		super();		
 		this.playerBegin = playerBegin;
 		this.timeLeft = TOTAL__TIME_VALUE;
-		//this.clientLeft = null;
-		//this.clientRigth = null;
+		this.clientLeft = null;
+		this.clientRigth = null;
 		this.assignInitialPosition(player1, player2);
 		
 	}
