@@ -79,9 +79,14 @@ public class OperationsClient {
 									}
 								} else if(messageRead.getType().equals("Match")){
 									MessageMatch match= (MessageMatch) messageRead;
-									System.out.println("izquieda: "+match.getPlayerLeft().getName());
-									System.out.println("derecha: "+match.getPlayerRigth().getName());
-									System.out.println("puntos del mazo: "+match.getDisk().getX()+" - "+match.getDisk().getY());
+									if (match.getPlayerLeft().getName().equals(dataGame.getSelf().getName())) {
+										dataGame.setSelf(match.getPlayerLeft());
+										dataGame.setCounter(match.getPlayerRigth());
+									}else {
+										dataGame.setSelf(match.getPlayerRigth());
+										dataGame.setCounter(match.getPlayerLeft());
+									}
+									dataGame.setDisc(match.getDisk());
 								}
 							}
 						}
