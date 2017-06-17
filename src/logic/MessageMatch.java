@@ -12,16 +12,21 @@ public class MessageMatch extends MessageInterface{
 	private Player playerLeft;
 	private Player playerRigth;
 	private Point disk;
+	private boolean isGame; 
+	private int timeLeft; //tiempo restante
+
 	
 	/**
 	 * constructor
 	 * @param type
 	 */
-	public MessageMatch(Player playerLeft, Player playerRigth, Point disk) {
+	public MessageMatch(Player playerLeft, Player playerRigth, Point disk, boolean isGame, int timeLeft) {
 		super("Match");		
 		this.playerLeft = playerLeft;
 		this.playerRigth = playerRigth;
 		this.disk = disk;
+		this.isGame = isGame;
+		this.timeLeft = timeLeft;
 	}
 
 	/**
@@ -44,5 +49,21 @@ public class MessageMatch extends MessageInterface{
 	public Point getDisk() {
 		return disk;
 	}
+
+	/**
+	 * @return the isGame
+	 */
+	public boolean isGame() {
+		return isGame;
+	}
+
+	/**
+	 * @return the timeLeft
+	 */
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+	
+	
 
 }	

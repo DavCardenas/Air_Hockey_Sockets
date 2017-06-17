@@ -79,14 +79,7 @@ public class OperationsClient {
 									}
 								} else if(messageRead.getType().equals("Match")){
 									MessageMatch match= (MessageMatch) messageRead;
-									if (match.getPlayerLeft().getName().equals(dataGame.getSelf().getName())) {
-										dataGame.setSelf(match.getPlayerLeft());
-										dataGame.setCounter(match.getPlayerRigth());
-									}else {
-										dataGame.setSelf(match.getPlayerRigth());
-										dataGame.setCounter(match.getPlayerLeft());
-									}
-									dataGame.setDisc(match.getDisk());
+									
 								}
 							}
 						}
