@@ -9,6 +9,9 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,7 +26,7 @@ import logic.Player;
 import logic.Singlenton;
 
 
-public class WindowsGame extends JFrame implements Runnable{
+public class WindowsGame extends JFrame implements Runnable, MouseMotionListener{
 
 	/**
 	 * 
@@ -171,6 +174,8 @@ public class WindowsGame extends JFrame implements Runnable{
 		
 		add(pnl_Information, BorderLayout.NORTH);
 		
+		addMouseMotionListener(this);
+		
 	}
 	
 	/**
@@ -202,11 +207,11 @@ public class WindowsGame extends JFrame implements Runnable{
 		// se pinta primero el tablero con el fin de que quede por debajo de todos los demas elementos
 		g.drawImage(table, 0, 130, TABLE_WIDTH, TABLE_HEIGHT, null);
 		// pintar la pelota
-		//g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
+		g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
 		// pintar un jugador
-		//g.drawImage(playerBlue, positionPlayerB.x, positionPlayerB.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerBlue, positionPlayerB.x, positionPlayerB.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		// pintar el segundo jugador
-		//g.drawImage(playerRed, positionPlayerR.x, positionPlayerR.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerRed, positionPlayerR.x, positionPlayerR.y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		
 	}
 	
@@ -218,14 +223,14 @@ public class WindowsGame extends JFrame implements Runnable{
 		Point playerBlue = null;
 		Point playerRed =  null;
 		
-//		disc = dataGame.getDisc();
-//		if (dataGame.isBegin()) {
-//			playerBlue = dataGame.getSelf().getPosition();
-//			playerRed = dataGame.getCounter().getPosition();
-//		}else {
-//			playerBlue = dataGame.getCounter().getPosition();
-//			playerRed = dataGame.getSelf().getPosition();
-//		}
+		disc = dataGame.getDisc();
+		if (dataGame.isBegin()) {
+			playerBlue = dataGame.getSelf().getPosition();
+			playerRed = dataGame.getCounter().getPosition();
+		}else {
+			playerBlue = dataGame.getCounter().getPosition();
+			playerRed = dataGame.getSelf().getPosition();
+		}
 		
 		paintComp(g, disc, playerBlue, playerRed);
 	}
@@ -255,18 +260,6 @@ public class WindowsGame extends JFrame implements Runnable{
 	public void run() {
 		
 		while (isPaint) {
-//			disc = dataGame.getDisc();
-//			if (dataGame.isBegin()) {
-//				playerBlue = dataGame.getSelf().getPosition();
-//				playerRed = dataGame.getCounter().getPosition();
-//			}else {
-//				playerBlue = dataGame.getCounter().getPosition();
-//				playerRed = dataGame.getSelf().getPosition();
-//			}
-			//Graphics2D graphics = (Graphics2D) this.getGraphics();
-			//paintComp(new MyGraphics().getGraphics(), disc, playerBlue, playerRed);
-			//paintComp(getContentPane().getGraphics(), null, null, null);
-			//windows.updatePaneInformation(dataGame.getSelf(), dataGame.getCounter(), dataGame.getLevel(), dataGame.getTimeGame());
 			repaint();
 			try {
 				Thread.sleep(100);
@@ -274,6 +267,18 @@ public class WindowsGame extends JFrame implements Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		Point pointPlayer = new Point(e.getX(), e.getY());
+		dataGame.getSelf().setPosition(pointPlayer);
+		System.out.println("Actualizando informacion");
 	}
 	
 }

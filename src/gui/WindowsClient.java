@@ -253,9 +253,9 @@ public class WindowsClient extends JFrame {
 	 * se utiliza para crear un juego
 	 */
 	public void createGame() {
-
 		game = new WindowsGame();
 		game.setVisible(true);
+		game.startPaint();
 	}
 
 }
