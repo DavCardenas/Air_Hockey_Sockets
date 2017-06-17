@@ -282,6 +282,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		int aux_Y = PLAYER_HEIGHT/2;
 		
 		if (dataGame.isBegin()) { // si el es el azul
+			System.out.println("entra si es azul");
 			if (e.getX() + aux_X > 0 && e.getX() + aux_X < TABLE_WIDTH/2) {
 				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
 					pointPlayer = new Point(e.getX(), e.getY());  // cambia la posicion
@@ -292,6 +293,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
 			}
 		}else { // si es el rojo
+			System.out.println("entra si es rojo");
 			if (e.getX() + aux_X > TABLE_WIDTH/2 && e.getX() + aux_X < TABLE_WIDTH) {
 				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
 					pointPlayer = new Point(e.getX(), e.getY()); // cambia la posicion
@@ -304,7 +306,8 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		}
 		dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
 		MessageMatchClient msn = new MessageMatchClient(); // crea el mensaje a enviar
-		msn.setPlayer(dataGame.getSelf()); // asigna el contenido al mensaje
+		msn.setPlayer(dataGame.getSelf().getPosition()); // asigna el contenido al mensaje
+		msn.setName(dataGame.getSelf().getName());
 		WindowsLoggin.client.getOperations().write(msn); // envia el mensaje al servidor
 	}
 

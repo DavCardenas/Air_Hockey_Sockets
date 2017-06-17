@@ -80,7 +80,13 @@ public class OperationsServer {
 										writeMessage(invitation.getPlayersVector()[1], msn);
 									}
 								}else if (message.getType().equals("Match_Client")) {
-									System.out.println("algo tiene que hacer");
+									MessageMatchClient msn = (MessageMatchClient) message;
+									Match match = findMatch(msn.getName());
+									if (match != null) {
+										match.changePosition(msn.getName(), msn.getPositionPlayer());
+									}else {
+										System.out.println("algo esta mal");
+									}
 								}
 							}
 						}
@@ -109,6 +115,19 @@ public class OperationsServer {
 		Server.drivers.add(this);
 
 	}
+	
+	public Match findMatch(String p_name) {
+		Match aux;
+		Match match = null;
+		for (int i = 0; i < Server.listMatchs.size(); i++) {
+			aux = Server.listMatchs.get(i);
+			if (aux.getPlayerLeft().getName().equals(p_name) || aux.getPlayerRigth().getName().equals(p_name)) {
+				match = aux;
+			}
+		}
+		return match;
+	}
+	
 	
 	/**
 	 * escribirle a un jugador que empiece el juego y envia el ganador
