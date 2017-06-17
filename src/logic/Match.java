@@ -20,6 +20,7 @@ public class Match {
 	private Point disk; //disco
 	private int timeLeft; //tiempo restante
 	private String playerBegin; //nombre del jugador que  inicia
+	
 	/**
 	 * @param playerLeft
 	 * @param playerRigth

@@ -139,6 +139,7 @@ public class WindowsGame extends JFrame{
 		add(pnl_Information, BorderLayout.NORTH);
 		
 		pnl_Game = new PaneGame(this);
+		pnl_Game.startPaint();
 	}
 	
 	/**
