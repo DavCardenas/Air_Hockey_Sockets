@@ -68,7 +68,10 @@ public class OperationsServer {
 										writeInitGame(msn, invitation.getPlayerInvited());
 										msn.setIsAccept("BEGIN");
 										writeInitGame(msn, invitation.getPlayerClient());
-										Server.listMatchs.add(new Match(invitation.getPlayerInvited(), invitation.getPlayerClient(), msn.getPlayerBegin()));
+										Match match = new Match(invitation.getPlayerInvited(), invitation.getPlayerClient(), msn.getPlayerBegin());
+										match.setClientLeft(Server.drivers.get(findConection(match.getPlayerLeft().getName())));
+										match.setClientRigth(Server.drivers.get(findConection(match.getPlayerRigth().getName())));
+										Server.listMatchs.add(match);
 									} else {
 										MessageInvitationClient msn = new MessageInvitationClient(
 												invitation.getPlayersVector()[0], invitation.getPlayersVector()[1]);

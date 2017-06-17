@@ -18,6 +18,8 @@ public class Match {
 	private Point disk; //disco
 	private int timeLeft; //tiempo restante
 	private String playerBegin; //nombre del jugador que  inicia
+	private OperationsServer clientLeft;
+	private OperationsServer clientRigth;
 	/**
 	 * @param playerLeft
 	 * @param playerRigth
@@ -26,8 +28,19 @@ public class Match {
 		super();		
 		this.playerBegin = playerBegin;
 		this.timeLeft = TOTAL__TIME_VALUE;
+		this.clientLeft = null;
+		this.clientRigth = null;
+		this.assignInitialPosition(player1, player2);
 		
-		this.assignInitialPosition(player1, player2);				
+	}
+	
+	/**
+	 * metodo para esribir a jugadores
+	 */
+	public void writePlayers(){
+		MessageMatch match = new MessageMatch(this.playerLeft, this.playerRigth, this.disk);
+		this.clientLeft.write(match);
+		this.clientRigth.write(match);
 	}
 	
 	/**
@@ -35,9 +48,11 @@ public class Match {
 	 */
 	private void assignInitialPosition(String player1, String player2){
 		if(player1.equals(this.playerBegin)){
-			this.assignInitialPositionPlayerLeft(player1);			
+			this.assignInitialPositionPlayerLeft(player1);	
+			this.assignInitialPositionPlayerRigth(player2);
 		} else {
-			this.assignInitialPositionPlayerRigth(player2);			
+			this.assignInitialPositionPlayerLeft(player2);	
+			this.assignInitialPositionPlayerRigth(player1);		
 		}
 		this.createdisk();
 	}
@@ -68,14 +83,14 @@ public class Match {
 	/**
 	 * @return the disk
 	 */
-	public Point getdisk() {
+	public Point getDisk() {
 		return disk;
 	}
 
 	/**
 	 * @param disk the disk to set
 	 */
-	public void setdisk(Point disk) {
+	public void setDisk(Point disk) {
 		this.disk = disk;
 	}
 
@@ -120,6 +135,35 @@ public class Match {
 	public Player getPlayerRigth() {
 		return playerRigth;
 	}
+
+	/**
+	 * @return the clientLeft
+	 */
+	public OperationsServer getClientLeft() {
+		return clientLeft;
+	}
+
+	/**
+	 * @param clientLeft the clientLeft to set
+	 */
+	public void setClientLeft(OperationsServer clientLeft) {
+		this.clientLeft = clientLeft;
+	}
+
+	/**
+	 * @return the clientRigth
+	 */
+	public OperationsServer getClientRigth() {
+		return clientRigth;
+	}
+
+	/**
+	 * @param clientRigth the clientRigth to set
+	 */
+	public void setClientRigth(OperationsServer clientRigth) {
+		this.clientRigth = clientRigth;
+	}
+
 	
 	
 }

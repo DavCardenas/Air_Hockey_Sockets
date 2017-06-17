@@ -76,7 +76,12 @@ public class OperationsClient {
 									} else {										
 										dataGame.setInvitationClient("");
 									}
-								}								
+								} else if(messageRead.getType().equals("Match")){
+									MessageMatch match= (MessageMatch) messageRead;
+									System.out.println("izquieda: "+match.getPlayerLeft().getName());
+									System.out.println("derecha: "+match.getPlayerRigth().getName());
+									System.out.println("puntos del mazo: "+match.getDisk().getX()+" - "+match.getDisk().getY());
+								}
 							}
 						}
 					} catch (ClassNotFoundException | IOException e) {
