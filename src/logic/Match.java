@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import gui.WindowsGame;
 
@@ -22,6 +23,9 @@ public class Match implements Runnable{
 	private OperationsServer clientRigth;
 	private Thread game; // hilo que controla el juego
 	private boolean isGame; // controla si se esta en juego o no.
+	private boolean isRun; //controla si el disco se esta moviendo o no
+	private int orientation; //0 --> izquierda arriba, 1 --> izquierda recto, 2 --> izquierda abajo
+							//3 --> derecha arriba, 4 --> derecha recto, 5 --> derecha abajo
 
 	/**
 	 * @param playerLeft
@@ -34,6 +38,7 @@ public class Match implements Runnable{
 		this.clientLeft = null;
 		this.clientRigth = null;
 		this.assignInitialPosition(player1, player2);
+		this.isRun = false;
 		isGame = true;
 		game = new Thread(this);
 	}
@@ -185,7 +190,34 @@ public class Match implements Runnable{
 	@Override
 	public void run() {
 		while (isGame) {			
-			//verficair colision inicial 
+			//verficair colision inicial para darle movimiento 			
+			defineMovementDisk();
+			
+			if(this.isRun){
+				switch (this.orientation){
+				case 0:
+					this.moveDiskDiagonalUpTurnLeft();
+					break;
+				case 1:
+					this.moveDiskRectTurnLeft();
+					break;
+				case 2:
+					this.moveDiskDiagonalDownTurnLeft();
+					break;
+				case 3:
+					this.moveDiskDiagonalUpTurnRigth();
+					break;
+				case 4:
+					this.moveDiskRectTurnRigth();
+					break;
+				case 5:
+					this.moveDiskDiagonalDownTurnRigth();
+					break;
+				default:
+					System.out.println("MOVIMIENTO NO ESPERADO");
+					break;
+				}
+			}
 			
 			if(this.timeLeft>0)
 				this.timeLeft--;
@@ -196,6 +228,93 @@ public class Match implements Runnable{
 			sleepMe(100);
 		}
 		this.setWinner();
+	}
+	
+	private void defineMovementDisk(){
+		int tamanoRec = WindowsGame.DISC_TAM/2;
+		if(this.isLeftSideDisk()){
+			Rectangle diskLeftUp = new Rectangle(this.disk.x, this.disk.y, tamanoRec, tamanoRec); //parte izquierda arriba del disco
+			Rectangle diskLeftDown = new Rectangle(this.disk.x, (this.disk.y + tamanoRec), tamanoRec, tamanoRec);//parte izquierda abajo del disco
+		
+			Rectangle playerRectangleLeft = new Rectangle(this.playerLeft.getPosition().x, this.playerLeft.getPosition().y, WindowsGame.PLAYER_WIDTH, WindowsGame.PLAYER_WIDTH);
+			
+			if(playerRectangleLeft.contains(diskLeftUp) && playerRectangleLeft.contains(diskLeftDown)){ //toca ambas partes
+				this.isRun = true;
+				this.orientation = 4;
+			} else if(playerRectangleLeft.contains(diskLeftUp)){
+				this.isRun = true;
+				this.orientation = 5;
+			} else if(playerRectangleLeft.contains(diskLeftDown)){
+				this.isRun = true;
+				this.orientation = 3;
+			}
+		} else {
+			Rectangle diskRigthUp = new Rectangle((this.disk.x + tamanoRec), this.disk.y, tamanoRec, tamanoRec); //parte izquierda arriba del disco
+			Rectangle diskRigthDown = new Rectangle((this.disk.x + tamanoRec), (this.disk.y + tamanoRec), tamanoRec, tamanoRec);//parte izquierda abajo del disco			
+			
+			Rectangle playerRectangleRigth = new Rectangle(this.playerRigth.getPosition().x, this.playerRigth.getPosition().y, WindowsGame.PLAYER_WIDTH, WindowsGame.PLAYER_WIDTH);
+			
+			if(playerRectangleRigth.contains(diskRigthUp) && playerRectangleRigth.contains(diskRigthDown)){ //toca ambas partes
+				this.isRun = true;
+				this.orientation = 1;
+			} else if(playerRectangleRigth.contains(diskRigthUp)){
+				this.isRun = true;
+				this.orientation = 2;
+			} else if(playerRectangleRigth.contains(diskRigthDown)){
+				this.isRun = true;
+				this.orientation = 0;
+			}
+		}
+	}
+	
+	/**
+	 *mueve el disco de forma recta hacia la derecha 
+	 */
+	private void moveDiskRectTurnRigth(){
+		this.disk.x++;
+	}
+	/**
+	 *mueve el disco de forma diagonal hacia abajo para la derecha
+	 */
+	private void moveDiskDiagonalDownTurnRigth(){
+		this.disk.x++;
+		this.disk.y++;
+	}
+	/**
+	 *mueve el disco de forma diagonal hacia arriba para la derecha
+	 */
+	private void moveDiskDiagonalUpTurnRigth(){
+		this.disk.x++;
+		this.disk.y--;
+	}
+	
+	/**
+	 *mueve el disco de forma recta hacia la izquierda 
+	 */
+	private void moveDiskRectTurnLeft(){
+		this.disk.x--;
+	}
+	/**
+	 *mueve el disco de forma diagonal hacia abajo para la izquierda
+	 */
+	private void moveDiskDiagonalDownTurnLeft(){
+		this.disk.x--;
+		this.disk.y++;
+	}
+	/**
+	 *mueve el disco de forma diagonal hacia arriba para la izquierda
+	 */
+	private void moveDiskDiagonalUpTurnLeft(){
+		this.disk.x--;
+		this.disk.y--;
+	}
+	
+	/**
+	 * verifica si la posicion del disco es menor a la mitad del ancho del tablero
+	 * @return
+	 */
+	private boolean isLeftSideDisk(){
+		return (this.disk.x + WindowsGame.DISC_TAM) < (WindowsGame.PLAYER_WIDTH / 2);
 	}
 	
 	/**
