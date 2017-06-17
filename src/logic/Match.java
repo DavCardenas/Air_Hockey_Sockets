@@ -185,7 +185,7 @@ public class Match implements Runnable{
 	@Override
 	public void run() {
 		while (isGame) {			
-			
+			//verficair colision inicial 
 			
 			if(this.timeLeft>0)
 				this.timeLeft--;
@@ -193,7 +193,7 @@ public class Match implements Runnable{
 				isGame=false;
 			
 			writePlayers();		
-			sleepMe(200);
+			sleepMe(100);
 		}
 		this.setWinner();
 	}
