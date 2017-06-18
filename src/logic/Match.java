@@ -8,6 +8,7 @@ import gui.WindowsGame;
 public class Match implements Runnable{
 	
 	public static final int TOTAL__TIME_VALUE = 120; // TIEMPO TOTAL DE LA PARTIDA EN SEGUNDOS
+	public static final int NS_FOR_SECONDS = 1000000000; // sirve para hacer la conersion de nano segundo a segundos
 	public static final int RANGE_CENTER = 100; //rango que tendra el disk con respecto al centro
 	public static final int X_POSITION_INITIAL_PLAYER_LEFT = 15; //posicion inicial en x para el jugador izquierda
 	public static final int X_POSITION_INITIAL_PLAYER_RIGTH = WindowsGame.WIDTH - RANGE_CENTER; //posicion en x para el jugador derecha
@@ -126,10 +127,13 @@ public class Match implements Runnable{
 
 	@Override
 	public void run() {
-		long timerStart = 0;
-		long timerEnd = 0;
-		timerStart = System.nanoTime();
-		while (isGame) {			
+		long refereciaTimer = System.nanoTime();
+		
+		double timeTranscurrido;
+		double delta = 0;
+		
+		while (isGame) {	
+			final long timerStart = System.nanoTime();
 			//verficair colision inicial para darle movimiento 			
 			defineMovementDisk();
 			
@@ -162,17 +166,19 @@ public class Match implements Runnable{
 			
 			writePlayers();		
 			
-			timerEnd += (System.nanoTime() - timerStart)/1000000000;
-			System.out.println("timer_: " + timerEnd);
-			if (timerEnd <= TOTAL__TIME_VALUE) {
-				int aux = (int) timerEnd;
+			timeTranscurrido = timerStart - refereciaTimer;
+			refereciaTimer = timerStart; 
+			
+			delta += timeTranscurrido / NS_FOR_SECONDS;
+			
+			if (delta >= 1) {
+				delta--;
 				if(this.timeLeft>0)
-					this.timeLeft = TOTAL__TIME_VALUE - aux;
+					this.timeLeft -= 1;
 				else
 					isGame=false;
-			}else {
-				isGame=false;
 			}
+			
 			sleepMe(100);
 		}
 		this.setWinner();
