@@ -233,6 +233,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		}else {
 			playerBlue = dataGame.getCounter().getPosition();
 			playerRed = dataGame.getSelf().getPosition();
+			updatePaneInformation(dataGame.getSelf(), dataGame.getCounter(), dataGame.getLevel(), dataGame.getTimeGame());
 		}
 		
 		paintComp(g, disc, playerBlue, playerRed);
