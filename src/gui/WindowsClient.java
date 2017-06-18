@@ -136,7 +136,7 @@ public class WindowsClient extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		setTitle("Conectado ....");
+		setTitle(TITLE);
 	}
 
 	/**
@@ -245,7 +245,6 @@ public class WindowsClient extends JFrame {
 	 * sirve para minimizar la ventana
 	 */
 	public void minnimizar() {
-		JOptionPane.showMessageDialog(this, "Entrando al Juego");
 		this.setExtendedState(ICONIFIED);
 	}
 

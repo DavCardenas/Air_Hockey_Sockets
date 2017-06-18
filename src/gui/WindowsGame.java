@@ -10,7 +10,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.ImageIcon;
@@ -212,9 +211,9 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		// pintar la pelota
 		g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
 		// pintar un jugador
-		g.drawImage(playerBlue, positionPlayerB.x + aux_X, positionPlayerB.y + aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerBlue, positionPlayerB.x - aux_X, positionPlayerB.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		// pintar el segundo jugador
-		g.drawImage(playerRed, positionPlayerR.x + aux_X, positionPlayerR.y + aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		g.drawImage(playerRed, positionPlayerR.x - aux_X, positionPlayerR.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		
 	}
 	
@@ -230,6 +229,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		if (dataGame.isBegin()) {
 			playerBlue = dataGame.getSelf().getPosition();
 			playerRed = dataGame.getCounter().getPosition();
+			updatePaneInformation(dataGame.getSelf(), dataGame.getCounter(), dataGame.getLevel(), dataGame.getTimeGame());
 		}else {
 			playerBlue = dataGame.getCounter().getPosition();
 			playerRed = dataGame.getSelf().getPosition();
@@ -282,9 +282,8 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		int aux_Y = PLAYER_HEIGHT/2;
 		
 		if (dataGame.isBegin()) { // si el es el azul
-			System.out.println("entra si es azul");
-			if (e.getX() + aux_X > 0 && e.getX() + aux_X < TABLE_WIDTH/2) {
-				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
+			if (e.getX() - aux_X > 0 && e.getX() + aux_X < TABLE_WIDTH/2) {
+				if (e.getY() + (aux_Y) < TABLE_HEIGHT+130 && e.getY() - aux_Y > 130) {
 					pointPlayer = new Point(e.getX(), e.getY());  // cambia la posicion
 				}else {
 					pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
@@ -293,9 +292,8 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
 			}
 		}else { // si es el rojo
-			System.out.println("entra si es rojo");
-			if (e.getX() + aux_X > TABLE_WIDTH/2 && e.getX() + aux_X < TABLE_WIDTH) {
-				if (e.getY() + aux_Y > TABLE_WIDTH && e.getY() + aux_Y < 130) {
+			if (e.getX() - aux_X > TABLE_WIDTH/2 && e.getX() + aux_X < TABLE_WIDTH) {
+				if (e.getY() + (aux_Y) < TABLE_HEIGHT+130 && e.getY() - aux_Y > 130) {
 					pointPlayer = new Point(e.getX(), e.getY()); // cambia la posicion
 				}else {
 					pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
@@ -304,10 +302,11 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
 			}
 		}
-		dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
+		//dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
 		MessageMatchClient msn = new MessageMatchClient(); // crea el mensaje a enviar
-		msn.setPlayer(dataGame.getSelf().getPosition()); // asigna el contenido al mensaje
-		msn.setName(dataGame.getSelf().getName());
+		Player aux = Player.changeDir(dataGame.getSelf());
+		msn.setPlayer(pointPlayer); // asigna el contenido al mensaje
+		msn.setName(aux.getName());
 		WindowsLoggin.client.getOperations().write(msn); // envia el mensaje al servidor
 	}
 

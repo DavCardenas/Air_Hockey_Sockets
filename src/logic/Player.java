@@ -15,19 +15,26 @@ public class Player implements Serializable{
 	private int points; // puntos ganados en el partido
 	private int goals; // numero de goles realizados
 	private boolean inGame; // sirve para verificar si el jugador esta jugando
-	private String color; // almacena el color del mazo para el jugador
 	
 	public Player() {
 		name = "";
 		position = null;
 	}
 	
-	public String getColor() {
-		return color;
-	}
-	
-	public void setColor(String color) {
-		this.color = color;
+	/**
+	 * clona un objeto a otro cambiando la direccion de memoria
+	 * @param p_player
+	 * @return
+	 */
+	public static Player changeDir(Player p_player) {
+		Player player_Aux = new Player();
+		player_Aux.setName(p_player.getName());
+		player_Aux.setPosition(p_player.getPosition());
+		player_Aux.setPoints(p_player.getPoints());
+		player_Aux.setGoals(p_player.getGoals());
+		player_Aux.setInGame(p_player.isInGame());
+		
+		return player_Aux;
 	}
 	
 	public Player(String p_name, Point p_point) {

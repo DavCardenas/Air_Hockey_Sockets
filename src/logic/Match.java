@@ -64,9 +64,9 @@ public class Match implements Runnable{
 	 */
 	public void changePosition(String p_name, Point point) {
 		if (playerLeft.getName().equals(p_name)) {
-			playerLeft.setPosition(point);
+				playerLeft.setPosition(point);
 		}else if(playerRigth.getName().equals(p_name)){
-			playerRigth.setPosition(point);
+				playerRigth.setPosition(point);
 		}
 	}
 	
@@ -74,7 +74,10 @@ public class Match implements Runnable{
 	 * metodo para esribir a jugadores
 	 */
 	public void writePlayers(){
-		MessageMatch match = new MessageMatch(this.playerLeft, this.playerRigth, this.disk, this.isGame, this.timeLeft);
+		
+		MessageMatch match = new MessageMatch(Player.changeDir(this.playerLeft), Player.changeDir(this.playerRigth), this.disk, this.isGame, this.timeLeft);
+		System.out.println("Iquier x: " + playerLeft.getPosition().x + " y: " +playerLeft.getPosition().y);
+		System.out.println("Derec x: " + playerRigth.getPosition().x + " y: " +playerRigth.getPosition().y);
 		this.clientLeft.write(match);
 		this.clientRigth.write(match);
 	}
@@ -202,6 +205,9 @@ public class Match implements Runnable{
 
 	@Override
 	public void run() {
+		long timerStart = 0;
+		long timerEnd = 0;
+		timerStart = System.nanoTime();
 		while (isGame) {			
 			//verficair colision inicial para darle movimiento 			
 			defineMovementDisk();
@@ -232,12 +238,20 @@ public class Match implements Runnable{
 				}
 			}
 			
-			if(this.timeLeft>0)
-				this.timeLeft--;
-			else
-				isGame=false;
 			
 			writePlayers();		
+			
+			timerEnd += (System.nanoTime() - timerStart)/1000000000;
+			System.out.println("timer_: " + timerEnd);
+			if (timerEnd <= TOTAL__TIME_VALUE) {
+				int aux = (int) timerEnd;
+				if(this.timeLeft>0)
+					this.timeLeft = TOTAL__TIME_VALUE - aux;
+				else
+					isGame=false;
+			}else {
+				isGame=false;
+			}
 			sleepMe(100);
 		}
 		this.setWinner();

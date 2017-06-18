@@ -103,14 +103,12 @@ public class Server implements Runnable{
 			@Override
 			public void run() {
 				while(start){
-					synchronized(drivers){
 						for (int i = 0; i < drivers.size(); i++) {
 							if(drivers.get(i) != null){
 								drivers.get(i).write(new MessageListPlayersServer(playerList()));
 								sleepMe(4000);
 							}
 						}					
-					}
 				}
 			}
 		});			

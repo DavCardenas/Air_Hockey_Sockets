@@ -31,5 +31,9 @@ public class MessageMatchClient extends MessageInterface{
 	public void setPlayer(Point player) {
 		this.player = player;
 	}
-	
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

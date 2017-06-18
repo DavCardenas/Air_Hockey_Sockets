@@ -80,8 +80,8 @@ public class OperationsClient {
 								} else if(messageRead.getType().equals("Match")){
 									MessageMatch match= (MessageMatch) messageRead;
 									if(dataGame.isBegin()){
-										dataGame.setSelf(match.getPlayerLeft());
-										dataGame.setCounter(match.getPlayerRigth());
+										dataGame.setSelf(Player.changeDir(match.getPlayerLeft()));
+										dataGame.setCounter(Player.changeDir(match.getPlayerRigth()));
 									} else {
 										dataGame.setCounter(match.getPlayerLeft());
 										dataGame.setSelf(match.getPlayerRigth());
@@ -135,7 +135,9 @@ public class OperationsClient {
 			if(message.getType().equals("Inicio")){
 				dataGame.setSelf(new Player(message.getMessage(), null));
 			}
-			System.out.println("Mesaje: "+message.getMessage());
+//			if (message.getType().equals("Match_Client")) {
+//				System.out.println("Mesaje: "+	(MessageMatchClient) message);
+//			}
 			outputStream.writeObject(message);
 
 		} catch (IOException e) {
