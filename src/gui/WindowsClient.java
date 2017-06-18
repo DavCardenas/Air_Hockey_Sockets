@@ -41,6 +41,7 @@ public class WindowsClient extends JFrame {
 	private GridBagLayout gridbag;
 	private GridBagConstraints gbc;
 	private WindowsGame game;
+	private Sounds sound;
 
 	private DataGameClient dataGame; // elemento global que contiene la
 										// informacion del juego
@@ -74,7 +75,8 @@ public class WindowsClient extends JFrame {
 												// que contiene la informacion
 												// del juego
 		isUpdateList = true;
-
+		sound = new Sounds();
+		
 		setTitle(TITLE);
 		setLayout(gridbag);
 		setSize(new Dimension(WIDTH, HEIGHT));
@@ -109,6 +111,7 @@ public class WindowsClient extends JFrame {
 		add(btn_play, gbc);
 
 		updatePlayerListGraphics();
+		sound.play(Sounds.RUTA_SOUND+"fondo.wav", true);
 	}
 
 	/**
