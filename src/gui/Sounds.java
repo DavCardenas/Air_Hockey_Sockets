@@ -5,7 +5,10 @@ import java.io.*;
 
 public class Sounds {
 
-	public static final String RUTA_SOUND = "/sounds/";;
+	public static final String RUTA_SOUND_BACKGROUND = "/sounds/fondo.wav";
+	public static final String RUTA_SOUND_LEVEL = "/sounds/cambio_nivel.wav";
+	public static final String RUTA_SOUND_BALL = "/sounds/golpe_pelota.wav";
+	public static final String RUTA_SOUND_POINT = "/sounds/gana_punto.wav";
 	private Clip clip;
 
 	/**

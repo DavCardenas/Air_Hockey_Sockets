@@ -111,7 +111,7 @@ public class WindowsClient extends JFrame {
 		add(btn_play, gbc);
 
 		updatePlayerListGraphics();
-		sound.play(Sounds.RUTA_SOUND+"fondo.wav", true);
+		sound.play(Sounds.RUTA_SOUND_BACKGROUND, true);
 	}
 
 	/**
