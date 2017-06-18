@@ -188,6 +188,49 @@ public class OperationsClient {
 		writring.start();
 	}
 	
+	/**
+	 * sirve para mantener enviando la posicion del jugador hacia el servidor 
+	 * utilizando lo que esta almacenado en el singlenton
+	 */
+	public void writePosition() {
+		write = true;
+		writring = new Thread(new Runnable() {
+		
+			@Override
+			public void run() {
+				try {
+					if (outputStream == null) {
+						outputStream = new ObjectOutputStream(
+								conection.getOutputStream());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				while (write) {
+					try {
+						MessageMatchClient msn = new MessageMatchClient(); // crea el mensaje a enviar
+						Player aux = Player.changeDir(dataGame.getSelf());
+						msn.setPlayer(aux.getPosition()); // asigna el contenido al mensaje
+						msn.setName(aux.getName());
+						System.out.println("Se escribe mensaje tipo siempre: "+ msn.getType());
+						outputStream.writeObject(msn);
+					} catch (IOException e) {
+						write = false;
+						closeConection();
+						System.out.println("Ya no puede escribir");
+					}
+
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		writring.start();
+	}
 	
 	/**
 	 * Cierra el flujo de escritura
@@ -197,7 +240,6 @@ public class OperationsClient {
 			write = false;
 			outputStream.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	

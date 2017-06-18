@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -63,7 +65,6 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 	public static final String GOALS = "Goles: ";
 	public static final String TIME = "Tiempo Restante: ";
 	public static final String TITLE = "-- Air Hockey --";
-	
 	
 	private JPanel pnl_Information; // Agrupacion de elementos que informan el estado del juego
 	
@@ -203,24 +204,33 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 	 * metodo que pinta los componentes del programa
 	 * @param g
 	 */
-	public void paintComp(Graphics g, Point positionDisc, Point positionPlayerB, Point positionPlayerR) {
+	public void paintComp(Point positionDisc, Point positionPlayerB, Point positionPlayerR) {
+		BufferStrategy strategy = getBufferStrategy();
+		
+		if (strategy == null) {
+			createBufferStrategy(3);
+		}
+		
+		Graphics p = strategy.getDrawGraphics();
+		super.paint(p);
+		
 		int aux_X = PLAYER_WIDTH/2;
 		int aux_Y = PLAYER_HEIGHT/2;
 		// se pinta primero el tablero con el fin de que quede por debajo de todos los demas elementos
-		g.drawImage(table, 0, 130, TABLE_WIDTH, TABLE_HEIGHT, null);
+		p.drawImage(table, 0, 130, TABLE_WIDTH, TABLE_HEIGHT, null);
 		// pintar la pelota
-		g.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
+		p.drawImage(disc, positionDisc.x, positionDisc.y, DISC_TAM, DISC_TAM, null);
 		// pintar un jugador
-		g.drawImage(playerBlue, positionPlayerB.x - aux_X, positionPlayerB.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		p.drawImage(playerBlue, positionPlayerB.x - aux_X, positionPlayerB.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		// pintar el segundo jugador
-		g.drawImage(playerRed, positionPlayerR.x - aux_X, positionPlayerR.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+		p.drawImage(playerRed, positionPlayerR.x - aux_X, positionPlayerR.y - aux_Y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
 		
+		strategy.show();
 	}
 	
 	
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
 		Point disc = null;
 		Point playerBlue = null;
 		Point playerRed =  null;
@@ -236,7 +246,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 			updatePaneInformation(dataGame.getSelf(), dataGame.getCounter(), dataGame.getLevel(), dataGame.getTimeGame());
 		}
 		
-		paintComp(g, disc, playerBlue, playerRed);
+		paintComp(disc, playerBlue, playerRed);
 	}
 	
 	/**
@@ -259,6 +269,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		WindowsGame g = new WindowsGame();
 		g.setVisible(true);
 	}
+	
 
 	@Override
 	public void run() {
@@ -266,7 +277,7 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 		while (isPaint) {
 			repaint();
 			try {
-				Thread.sleep(100);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -303,12 +314,11 @@ public class WindowsGame extends JFrame implements Runnable, MouseMotionListener
 				pointPlayer = dataGame.getSelf().getPosition(); // deja la misma posicion
 			}
 		}
-		//dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
-		MessageMatchClient msn = new MessageMatchClient(); // crea el mensaje a enviar
-		Player aux = Player.changeDir(dataGame.getSelf());
-		msn.setPlayer(pointPlayer); // asigna el contenido al mensaje
-		msn.setName(aux.getName());
-		WindowsLoggin.client.getOperations().write(msn); // envia el mensaje al servidor
+		dataGame.getSelf().setPosition(pointPlayer); // modifica el valor en el singlenton
+	}
+	
+	public void writePosition() {
+		WindowsLoggin.client.getOperations().writePosition();
 	}
 
 	@Override

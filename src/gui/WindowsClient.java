@@ -207,7 +207,6 @@ public class WindowsClient extends JFrame {
 
 		cbx_players.setModel(model);
 		cbx_players.repaint();
-		// cbx_players.updateUI();
 	}
 
 	/**
@@ -255,6 +254,7 @@ public class WindowsClient extends JFrame {
 		game = new WindowsGame();
 		game.setVisible(true);
 		game.startPaint();
+		game.writePosition();
 	}
 
 }

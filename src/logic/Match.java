@@ -179,7 +179,7 @@ public class Match implements Runnable{
 					isGame=false;
 			}
 			
-			sleepMe(100);
+			sleepMe(200);
 		}
 		this.setWinner();
 	}

@@ -112,7 +112,9 @@ public class DataGameClient {
 	}
 
 	public void setSelf(Player self) {
-		this.self = self;
+		if (this.self == null || this.self.getPosition() == null) { // se garantiza una unica vez
+			this.self = self;
+		}
 	}
 
 	public Player getCounter() {
