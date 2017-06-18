@@ -26,6 +26,8 @@ public class Match implements Runnable{
 	private boolean isRun; //controla si el disco se esta moviendo o no
 	private int orientation; //0 --> izquierda arriba, 1 --> izquierda recto, 2 --> izquierda abajo
 							//3 --> derecha arriba, 4 --> derecha recto, 5 --> derecha abajo
+	private Rectangle rectangleUp; //parte de arriba del tablero para detectar colisiones
+	private Rectangle rectangleDown; //parte de abajo del tablero para detectar colisiones
 
 	/**
 	 * @param playerLeft
@@ -37,6 +39,8 @@ public class Match implements Runnable{
 		this.timeLeft = TOTAL__TIME_VALUE;
 		this.clientLeft = null;
 		this.clientRigth = null;
+		this.rectangleUp = new Rectangle(0, 130, WindowsGame.TABLE_WIDTH, 20);
+		this.rectangleDown = new Rectangle(0, (WindowsGame.HEIGHT - 20), WindowsGame.WIDTH, 20);
 		this.assignInitialPosition(player1, player2);
 		this.isRun = false;
 		isGame = true;
@@ -119,89 +123,6 @@ public class Match implements Runnable{
 		this.disk = new Point(X_POSITION_INITIAL_DISK_LEFT, Y_POSITION_INITIAL);
 	}
 
-	/**
-	 * @return the disk
-	 */
-	public Point getDisk() {
-		return disk;
-	}
-
-	/**
-	 * @param disk the disk to set
-	 */
-	public void setDisk(Point disk) {
-		this.disk = disk;
-	}
-
-	/**
-	 * @return the timeLeft
-	 */
-	public int getTimeLeft() {
-		return timeLeft;
-	}
-
-	/**
-	 * @param timeLeft the timeLeft to set
-	 */
-	public void setTimeLeft(int timeLeft) {
-		this.timeLeft = timeLeft;
-	}
-
-	/**
-	 * @return the playerBegin
-	 */
-	public String getPlayerBegin() {
-		return playerBegin;
-	}
-
-	/**
-	 * @param playerBegin the playerBegin to set
-	 */
-	public void setPlayerBegin(String playerBegin) {
-		this.playerBegin = playerBegin;
-	}
-
-	/**
-	 * @return the playerLeft
-	 */
-	public Player getPlayerLeft() {
-		return playerLeft;
-	}
-
-	/**
-	 * @return the playerRigth
-	 */
-	public Player getPlayerRigth() {
-		return playerRigth;
-	}
-
-	/**
-	 * @return the clientLeft
-	 */
-	public OperationsServer getClientLeft() {
-		return clientLeft;
-	}
-
-	/**
-	 * @param clientLeft the clientLeft to set
-	 */
-	public void setClientLeft(OperationsServer clientLeft) {
-		this.clientLeft = clientLeft;
-	}
-
-	/**
-	 * @return the clientRigth
-	 */
-	public OperationsServer getClientRigth() {
-		return clientRigth;
-	}
-
-	/**
-	 * @param clientRigth the clientRigth to set
-	 */
-	public void setClientRigth(OperationsServer clientRigth) {
-		this.clientRigth = clientRigth;
-	}
 
 	@Override
 	public void run() {
@@ -304,15 +225,25 @@ public class Match implements Runnable{
 	 *mueve el disco de forma diagonal hacia abajo para la derecha
 	 */
 	private void moveDiskDiagonalDownTurnRigth(){
-		this.disk.x++;
-		this.disk.y++;
+		Rectangle diskDown = new Rectangle(this.disk.x, this.disk.y + (WindowsGame.DISC_TAM/2), WindowsGame.DISC_TAM, WindowsGame.DISC_TAM/2);
+		if(this.rectangleDown.contains(diskDown)){
+			this.orientation = 3;
+		} else {
+			this.disk.x++;
+			this.disk.y++;			
+		}
 	}
 	/**
 	 *mueve el disco de forma diagonal hacia arriba para la derecha
 	 */
 	private void moveDiskDiagonalUpTurnRigth(){
-		this.disk.x++;
-		this.disk.y--;
+		Rectangle diskUp = new Rectangle(this.disk.x, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM/2);
+		if(this.rectangleUp.contains(diskUp)){
+			this.orientation = 5;
+		} else {
+			this.disk.x++;
+			this.disk.y--;						
+		}
 	}
 	
 	/**
@@ -325,15 +256,25 @@ public class Match implements Runnable{
 	 *mueve el disco de forma diagonal hacia abajo para la izquierda
 	 */
 	private void moveDiskDiagonalDownTurnLeft(){
-		this.disk.x--;
-		this.disk.y++;
+		Rectangle diskDown = new Rectangle(this.disk.x, this.disk.y + (WindowsGame.DISC_TAM/2), WindowsGame.DISC_TAM, WindowsGame.DISC_TAM/2);
+		if(this.rectangleDown.contains(diskDown)){
+			this.orientation = 0;
+		} else {
+			this.disk.x--;
+			this.disk.y++;		
+		}
 	}
 	/**
 	 *mueve el disco de forma diagonal hacia arriba para la izquierda
 	 */
 	private void moveDiskDiagonalUpTurnLeft(){
-		this.disk.x--;
-		this.disk.y--;
+		Rectangle diskUp = new Rectangle(this.disk.x, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM/2);
+		if(this.rectangleUp.contains(diskUp)){
+			this.orientation = 2;
+		} else {
+			this.disk.x--;
+			this.disk.y--;						
+		}
 	}
 	
 	/**
@@ -375,6 +316,89 @@ public class Match implements Runnable{
 		return isGame;
 	}
 
-	
+
+	/**
+	 * @return the disk
+	 */
+	public Point getDisk() {
+		return disk;
+	}
+
+	/**
+	 * @param disk the disk to set
+	 */
+	public void setDisk(Point disk) {
+		this.disk = disk;
+	}
+
+	/**
+	 * @return the timeLeft
+	 */
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+
+	/**
+	 * @param timeLeft the timeLeft to set
+	 */
+	public void setTimeLeft(int timeLeft) {
+		this.timeLeft = timeLeft;
+	}
+
+	/**
+	 * @return the playerBegin
+	 */
+	public String getPlayerBegin() {
+		return playerBegin;
+	}
+
+	/**
+	 * @param playerBegin the playerBegin to set
+	 */
+	public void setPlayerBegin(String playerBegin) {
+		this.playerBegin = playerBegin;
+	}
+
+	/**
+	 * @return the playerLeft
+	 */
+	public Player getPlayerLeft() {
+		return playerLeft;
+	}
+
+	/**
+	 * @return the playerRigth
+	 */
+	public Player getPlayerRigth() {
+		return playerRigth;
+	}
+
+	/**
+	 * @return the clientLeft
+	 */
+	public OperationsServer getClientLeft() {
+		return clientLeft;
+	}
+
+	/**
+	 * @param clientLeft the clientLeft to set
+	 */
+	public void setClientLeft(OperationsServer clientLeft) {
+		this.clientLeft = clientLeft;
+	}
+
+	/**
+	 * @return the clientRigth
+	 */
+	public OperationsServer getClientRigth() {
+		return clientRigth;
+	}
+
+	/**
+	 * @param clientRigth the clientRigth to set
+	 */
+	public void setClientRigth(OperationsServer clientRigth) {
+		this.clientRigth = clientRigth;
+	}
 	
 }
