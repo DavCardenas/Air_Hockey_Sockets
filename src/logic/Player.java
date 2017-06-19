@@ -51,6 +51,13 @@ public class Player implements Serializable{
 	}
 
 	/**
+	 * suma un gol
+	 */
+	public void addGoals() {
+		goals++;
+	}
+	
+	/**
 	 * @param name
 	 */
 	public Player(String name) {

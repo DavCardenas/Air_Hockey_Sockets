@@ -89,7 +89,6 @@ public class OperationsClient {
 									dataGame.setDisc(match.getDisk());
 									dataGame.setTimeGame(match.getTimeLeft());
 									dataGame.setGame(match.isGame());
-									System.out.println(dataGame.getTimeGame());
 								}
 							}
 						}
@@ -213,7 +212,7 @@ public class OperationsClient {
 						Player aux = Player.changeDir(dataGame.getSelf());
 						msn.setPlayer(aux.getPosition()); // asigna el contenido al mensaje
 						msn.setName(aux.getName());
-						System.out.println("Se escribe mensaje tipo siempre: "+ msn.getType());
+						//System.out.println("Se escribe mensaje tipo siempre: "+ msn.getType());
 						outputStream.writeObject(msn);
 					} catch (IOException e) {
 						write = false;

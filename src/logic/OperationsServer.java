@@ -49,7 +49,7 @@ public class OperationsServer {
 							message = (MessageInterface) inputStream.readObject();
 
 							if (message != null) {
-								System.out.println("Mensaje del Cliente: " + message.getType());
+								//System.out.println("Mensaje del Cliente: " + message.getType());
 								if (message.getType().equals("Inicio")) { //mensaje tipo Inicio
 									Server.listPlayers.add(new Player(message.getMessage(), null));
 									System.out.println(message.getMessage());
@@ -218,8 +218,7 @@ public class OperationsServer {
 			outputStream.writeObject(message);
 
 		} catch (IOException e) {
-			System.out.println("sale");
-			e.printStackTrace();
+			System.out.println("No puede escribir");
 		}
 	}
 
