@@ -9,13 +9,17 @@ import gui.WindowsGame;
 public class Match implements Runnable{
 	
 	public static final int TOTAL__TIME_VALUE = 120; // TIEMPO TOTAL DE LA PARTIDA EN SEGUNDOS
-	public static final int SPEED = 40; // velocidad en pixeles para mover el disco
+	public static final int SPEED = 20; // velocidad en pixeles para mover el disco
 	public static final int NS_FOR_SECONDS = 1000000000; // sirve para hacer la conersion de nano segundo a segundos
 	public static final int RANGE_CENTER = 100; //rango que tendra el disk con respecto al centro
 	public static final int X_POSITION_INITIAL_PLAYER_LEFT = 15; //posicion inicial en x para el jugador izquierda
 	public static final int X_POSITION_INITIAL_PLAYER_RIGTH = WindowsGame.WIDTH - RANGE_CENTER; //posicion en x para el jugador derecha
 	public static final int Y_POSITION_INITIAL = WindowsGame.HEIGHT /2; //posicion inicial para todos en y
 	public static final int X_POSITION_INITIAL_DISK_LEFT = (WindowsGame.WIDTH /2)-RANGE_CENTER; //posicion inicial x cuando empieza izquierrda
+	public static final int X_POSITION_INITIAL_DISK_RIGTH = (WindowsGame.WIDTH /2) + RANGE_CENTER; //posicion inicial x cuando empieza derecha
+	public static final int AMMOUNT_POINTS_FOR_GOAL = 60; // cantidad de puntos a sumar por gol
+	public static final int AMMOUNT_POINTS_FOR_GOAL_COUNTER = 5; // cantidad de puntos a restar por gol
+	public static final int AMMOUNT_INCREMENT_POINT_LEVEL = 10; // puntos de incremento por nivel
 	
 	private Player playerLeft; //jugador de la izquierda
 	private Player playerRigth; //jugador de la derecha
@@ -47,8 +51,8 @@ public class Match implements Runnable{
 		this.clientLeft = null;
 		this.clientRigth = null;
 		tableGame = new Rectangle(0, 130, WindowsGame.TABLE_WIDTH, WindowsGame.TABLE_HEIGHT);
-		this.rectangleLeft = new Rectangle(0, 355, 10, 50);
-		this.rectangleRigth = new Rectangle((WindowsGame.TABLE_WIDTH - 10), 355, 10, 50);
+		this.rectangleLeft = new Rectangle(0, 340, 30, 80);
+		this.rectangleRigth = new Rectangle((WindowsGame.TABLE_WIDTH - 30), 340, 30, 80);
 		this.assignInitialPosition(player1, player2);
 		this.isRun = false;
 		levelGame = 1;
@@ -135,7 +139,17 @@ public class Match implements Runnable{
 	 * siempre al lado izquierdo
 	 */
 	private void createdisk(){
+		this.isRun = false;
 		this.disk = new Point(X_POSITION_INITIAL_DISK_LEFT, Y_POSITION_INITIAL +  WindowsGame.DISC_TAM/2);
+	}
+	
+	/**
+	 * metodo para crear y asignar posiciones iniciales al mazo
+	 * siempre al lado izquierdo
+	 */
+	private void creatediskRigth(){
+		this.isRun = false;
+		this.disk = new Point(X_POSITION_INITIAL_DISK_RIGTH, Y_POSITION_INITIAL +  WindowsGame.DISC_TAM/2);
 	}
 
 	/**
@@ -144,18 +158,47 @@ public class Match implements Runnable{
 	private void definePoints() {
 		System.out.println("Entra al metodo");
 		int tamRec = WindowsGame.DISC_TAM;
-		Rectangle disk = new Rectangle(this.disk.x, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
+		Rectangle disk = new Rectangle(this.disk.x , this.disk.y , WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
 		
-		if (rectangleLeft.contains(disk.x, disk.y)
+		
+		if (rectangleLeft.contains(disk.x - tamRec, disk.y)
 				|| rectangleLeft.contains(new Point(disk.x, disk.y + tamRec))) {
 			System.out.println("Hizo Gol el Derecho");
 			playerRigth.addGoals(); // suma un gol
+			addPointPlayer(playerRigth); // agrega puntos al jugador
+			createdisk();
+			addLevel();
 			sound.play(Sounds.RUTA_SOUND_POINT, false);
 		}else if (rectangleRigth.contains(new Point(disk.x + tamRec, disk.y))
 				|| rectangleRigth.contains(new Point(disk.x + tamRec, disk.y + tamRec))) {
 			System.out.println("Hizo Gol el Izquierdo");
-			playerLeft.addGoals();
+			playerLeft.addGoals(); // suma el gol
+			addPointPlayer(playerLeft); // agrega puntos
+			creatediskRigth();
+			addLevel();
 			sound.play(Sounds.RUTA_SOUND_POINT, false);
+		}
+	}
+	
+	/**
+	 * incrementa el nivel cada dos goles
+	 */
+	private void addLevel() {
+		if ((playerLeft.getGoals() % 2 == 0)
+				|| (playerRigth.getGoals() % 2 == 0)) {
+			levelGame++;
+		}
+	}
+	
+	/**
+	 * agrega puntos al jugador correspondiente
+	 * @param player
+	 */
+	private void addPointPlayer(Player player) {
+		if (levelGame == 1) {
+			player.setPoints(player.getPoints() + AMMOUNT_POINTS_FOR_GOAL);
+		}else {
+			player.setPoints(player.getPoints() + (AMMOUNT_POINTS_FOR_GOAL + (AMMOUNT_INCREMENT_POINT_LEVEL * levelGame)));
 		}
 	}
 
@@ -172,31 +215,7 @@ public class Match implements Runnable{
 			defineMovementDisk();
 			definePoints();
 			
-			if(this.isRun){
-				switch (this.orientation){
-				case 0:
-					this.moveDiskDiagonalUpTurnLeft();
-					break;
-				case 1:
-					this.moveDiskRectTurnLeft();
-					break;
-				case 2:
-					this.moveDiskDiagonalDownTurnLeft();
-					break;
-				case 3:
-					this.moveDiskDiagonalUpTurnRigth();
-					break;
-				case 4:
-					this.moveDiskRectTurnRigth();
-					break;
-				case 5:
-					this.moveDiskDiagonalDownTurnRigth();
-					break;
-				default:
-					System.out.println("MOVIMIENTO NO ESPERADO");
-					break;
-				}
-			}
+			moveDisc();
 			
 			
 			writePlayers();		
@@ -214,14 +233,55 @@ public class Match implements Runnable{
 					isGame=false;
 			}
 			
+			if (playerLeft.getGoals() == 7 || playerRigth.getGoals() == 7) {
+				isGame = false;
+			}
+			
 			sleepMe(200);
 		}
 		this.setWinner();
 	}
 	
+	/**
+	 * mueve el disco dependiendo de la orientacion
+	 */
+	public void moveDisc() {
+		if(this.isRun){
+			switch (this.orientation){
+			case 0:
+				this.moveDiskDiagonalUpTurnLeft();
+				break;
+			case 1:
+				this.moveDiskRectTurnLeft();
+				break;
+			case 2:
+				this.moveDiskDiagonalDownTurnLeft();
+				break;
+			case 3:
+				this.moveDiskDiagonalUpTurnRigth();
+				break;
+			case 4:
+				this.moveDiskRectTurnRigth();
+				break;
+			case 5:
+				this.moveDiskDiagonalDownTurnRigth();
+				break;
+			default:
+				System.out.println("MOVIMIENTO NO ESPERADO");
+				break;
+			}
+		}
+	}
+	
 	private void defineMovementDisk(){
 		int tamanoRec = WindowsGame.DISC_TAM/2;
 		int tamanoPlay = WindowsGame.PLAYER_HEIGHT/2;
+		Rectangle aux = new Rectangle(this.disk.x - tamanoRec, this.disk.y - tamanoRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
+		
+		if (tableGame.contains(aux)) {
+			moveDisc();
+		}
+		
 		if(this.isLeftSideDisk()){
 			Rectangle diskLeftUp = new Rectangle(this.disk.x, this.disk.y, tamanoRec, tamanoRec); //parte izquierda arriba del disco
 			Rectangle diskLeftDown = new Rectangle(this.disk.x, (this.disk.y + tamanoRec), tamanoRec, tamanoRec);//parte izquierda abajo del disco

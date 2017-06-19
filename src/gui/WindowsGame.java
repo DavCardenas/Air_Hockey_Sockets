@@ -12,7 +12,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,7 +22,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import logic.DataGameClient;
-import logic.MessageMatchClient;
 import logic.Player;
 import logic.Singlenton;
 
