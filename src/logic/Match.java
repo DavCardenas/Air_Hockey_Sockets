@@ -50,8 +50,8 @@ public class Match implements Runnable{
 		this.clientLeft = null;
 		this.clientRigth = null;
 		tableGame = new Rectangle(0, 130, WindowsGame.TABLE_WIDTH, WindowsGame.TABLE_HEIGHT);
-		this.rectangleLeft = new Rectangle(0, 340, 30, 80);
-		this.rectangleRigth = new Rectangle((WindowsGame.TABLE_WIDTH - 30), 340, 30, 80);
+		this.rectangleLeft = new Rectangle(0, 320, 30, 100);
+		this.rectangleRigth = new Rectangle((WindowsGame.TABLE_WIDTH - 30), 320, 30, 100);
 		this.assignInitialPosition(player1, player2);
 		this.isRun = false;
 		levelGame = 1;
@@ -149,33 +149,6 @@ public class Match implements Runnable{
 	private void creatediskRigth(){
 		this.isRun = false;
 		this.disk = new Point(X_POSITION_INITIAL_DISK_RIGTH, Y_POSITION_INITIAL +  WindowsGame.DISC_TAM/2);
-	}
-
-	/**
-	 * sirve para calcular cuando y quien hace puntos
-	 */
-	private void definePoints() {		
-		int tamRec = WindowsGame.DISC_TAM;
-		Rectangle disk = new Rectangle(this.disk.x , this.disk.y , WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		
-		
-		if (rectangleLeft.contains(new Point(disk.x - tamRec, disk.y))
-				|| rectangleLeft.contains(new Point(disk.x, disk.y + tamRec))) {
-			//System.out.println("Hizo Gol el Derecho");
-			playerRigth.addGoals(); // suma un gol
-			addPointPlayer(playerRigth); // agrega puntos al jugador
-			playerLeft.goalOwnDoor(); //resta goles al jugador de la izquierda pore recibir gol
-			createdisk();
-			sound.play(Sounds.RUTA_SOUND_POINT, false);
-		}else if (rectangleRigth.contains(new Point(disk.x + tamRec, disk.y))
-				|| rectangleRigth.contains(new Point(disk.x + tamRec, disk.y + tamRec))) {
-			System.out.println("Hizo Gol el Izquierdo");
-			playerLeft.addGoals(); // suma el gol
-			addPointPlayer(playerLeft); // agrega puntos
-			playerRigth.goalOwnDoor(); //resta goles al jugador de la derecha por recibir gol
-			creatediskRigth();
-			sound.play(Sounds.RUTA_SOUND_POINT, false);
-		}
 	}
 	
 	/**
@@ -338,6 +311,36 @@ public class Match implements Runnable{
 	}
 	
 	/**
+	 * sirve para calcular cuando y quien hace puntos
+	 */
+	private void definePoints() {		
+		int tamRec = WindowsGame.DISC_TAM;
+		
+		if(this.isLeftSideDisk()){
+			
+			if (rectangleLeft.contains(new Point(disk.x, disk.y))
+					|| rectangleLeft.contains(new Point(disk.x, disk.y + tamRec))) {
+				//System.out.println("Hizo Gol el Derecho");
+				playerRigth.addGoals(); // suma un gol
+				addPointPlayer(playerRigth); // agrega puntos al jugador
+				playerLeft.goalOwnDoor(); //resta goles al jugador de la izquierda pore recibir gol
+				createdisk();
+				sound.play(Sounds.RUTA_SOUND_POINT, false);
+			}
+		} else {
+			if (rectangleRigth.contains(new Point(disk.x + tamRec, disk.y))
+					|| rectangleRigth.contains(new Point(disk.x + tamRec, disk.y + tamRec))) {
+				//System.out.println("Hizo Gol el Izquierdo");
+				playerLeft.addGoals(); // suma el gol
+				addPointPlayer(playerLeft); // agrega puntos
+				playerRigth.goalOwnDoor(); //resta goles al jugador de la derecha por recibir gol
+				creatediskRigth();
+				sound.play(Sounds.RUTA_SOUND_POINT, false);
+			}			
+		}
+	}
+	
+	/**
 	 *mueve el disco de forma recta hacia la derecha 
 	 */
 	private void moveDiskRectTurnRigth(){
@@ -400,7 +403,11 @@ public class Match implements Runnable{
 		if (tableGame.contains(positionDiskNext)) {
 			this.disk.setLocation(nextX, this.disk.y);
 		}else {
-			orientation = 4;
+			if(this.disk.y >= this.rectangleLeft.y && this.disk.y <= this.rectangleLeft.y+this.rectangleLeft.height){
+				System.out.println("DEBERIA SER GOL DEL DE LA DERECHA");
+			} else {
+				orientation = 4;				
+			}
 		}
 		//this.disk.x--;
 	}
@@ -415,7 +422,9 @@ public class Match implements Runnable{
 		if(tableGame.contains(positionDiskNext)){
 			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (nextX < 30) { // golpea la pared izquierda
+			if(nextY >= this.rectangleLeft.y && nextY <= this.rectangleLeft.y+this.rectangleLeft.height){
+				System.out.println("DEBERIA SER GOL DEL DE LA DERECHA");
+			} else if (nextX < 30) { // golpea la pared izquierda
 				this.orientation = 5;
 			}else if(nextX >= 30){ // golpea la pared inferior
 				this.orientation = 0;				
@@ -435,7 +444,9 @@ public class Match implements Runnable{
 		if(tableGame.contains(positionDiskNext)){
 			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (nextX < 5) { // golpea la pared izquierda
+			if(nextY >= this.rectangleLeft.y && nextY <= this.rectangleLeft.y+this.rectangleLeft.height){
+				System.out.println("DEBERIA SER GOL DEL DE LA DERECHA");
+			} else if (nextX < 5) { // golpea la pared izquierda
 				this.orientation = 3;
 			}else if (nextX > 5) { // golpea la pared superior
 				this.orientation = 2;
@@ -451,17 +462,17 @@ public class Match implements Runnable{
 	 */
 	private int getSpeed(){
 		if(levelGame == 1){
-			return 15;
+			return 13;
 		} else if (levelGame == 2){
-			return 18;
+			return 15;
 		} else if (levelGame == 3){
-			return 21;
+			return 18;
 		} else if (levelGame == 4){
-			return 25;
+			return 21;
 		} else if (levelGame == 5){
-			return 28;
+			return 24;
 		} else if (levelGame == 6){
-			return 33;
+			return 27;
 		} else {
 			return 0;
 		}
