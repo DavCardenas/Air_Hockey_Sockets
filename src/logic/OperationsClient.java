@@ -83,12 +83,13 @@ public class OperationsClient {
 										dataGame.setSelf(Player.changeDir(match.getPlayerLeft()));
 										dataGame.setCounter(Player.changeDir(match.getPlayerRigth()));
 									} else {
-										dataGame.setCounter(match.getPlayerLeft());
-										dataGame.setSelf(match.getPlayerRigth());
+										dataGame.setSelf(Player.changeDir(match.getPlayerRigth()));
+										dataGame.setCounter(Player.changeDir(match.getPlayerLeft()));
 									}
 									dataGame.setDisc(match.getDisk());
 									dataGame.setTimeGame(match.getTimeLeft());
 									dataGame.setGame(match.isGame());
+									dataGame.setLevel(match.getLevelGame());
 								}
 							}
 						}

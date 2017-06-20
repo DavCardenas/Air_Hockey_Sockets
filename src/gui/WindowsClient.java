@@ -32,7 +32,6 @@ public class WindowsClient extends JFrame {
 
 	public static final int WIDTH = 300;
 	public static final int HEIGHT = 150;
-	public static final String TITLE = "Jugar Contra ";
 
 	private JComboBox<Player> cbx_players;
 	private DefaultComboBoxModel<Player> model;
@@ -77,12 +76,12 @@ public class WindowsClient extends JFrame {
 		isUpdateList = true;
 		sound = new Sounds();
 		
-		setTitle(TITLE);
+		setTitle(dataGame.getSelf().getName());
 		setLayout(gridbag);
 		setSize(new Dimension(WIDTH, HEIGHT));
 		setLocationRelativeTo(null);
 
-		lb_title = new JLabel(TITLE);
+		lb_title = new JLabel(dataGame.getSelf().getName());
 		lb_title.setFont(new Font("Sans", Font.BOLD, 20));
 		gbc = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				new Insets(5, 5, 5, 5), 0, 0);
@@ -139,7 +138,7 @@ public class WindowsClient extends JFrame {
 				e.printStackTrace();
 			}
 		}
-		setTitle(TITLE);
+		setTitle(dataGame.getSelf().getName());
 	}
 
 	/**

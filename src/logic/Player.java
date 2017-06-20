@@ -84,6 +84,18 @@ public class Player implements Serializable{
 	}
 	
 	/**
+	 *anotacion en propia puerta, antes se verifica si se cuenta con mas de 5goles
+	 *para restar cinco, y si no dejar en 0 
+	 */
+	public void goalOwnDoor(){
+		if(this.points>5){
+			this.points-=5;
+		} else {
+			this.points = 0;
+		}
+	}
+	
+	/**
 	 * @param name
 	 */
 	public Player(String name) {

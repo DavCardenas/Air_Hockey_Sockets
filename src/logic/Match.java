@@ -9,7 +9,6 @@ import gui.WindowsGame;
 public class Match implements Runnable{
 	
 	public static final int TOTAL__TIME_VALUE = 120; // TIEMPO TOTAL DE LA PARTIDA EN SEGUNDOS
-	public static final int SPEED = 20; // velocidad en pixeles para mover el disco
 	public static final int NS_FOR_SECONDS = 1000000000; // sirve para hacer la conersion de nano segundo a segundos
 	public static final int RANGE_CENTER = 100; //rango que tendra el disk con respecto al centro
 	public static final int X_POSITION_INITIAL_PLAYER_LEFT = 15; //posicion inicial en x para el jugador izquierda
@@ -17,7 +16,7 @@ public class Match implements Runnable{
 	public static final int Y_POSITION_INITIAL = WindowsGame.HEIGHT /2; //posicion inicial para todos en y
 	public static final int X_POSITION_INITIAL_DISK_LEFT = (WindowsGame.WIDTH /2)-RANGE_CENTER; //posicion inicial x cuando empieza izquierrda
 	public static final int X_POSITION_INITIAL_DISK_RIGTH = (WindowsGame.WIDTH /2) + RANGE_CENTER; //posicion inicial x cuando empieza derecha
-	public static final int AMMOUNT_POINTS_FOR_GOAL = 60; // cantidad de puntos a sumar por gol
+	public static final int AMMOUNT_POINTS_FOR_GOAL_INITIAL = 60; // cantidad de puntos a sumar por gol
 	public static final int AMMOUNT_POINTS_FOR_GOAL_COUNTER = 5; // cantidad de puntos a restar por gol
 	public static final int AMMOUNT_INCREMENT_POINT_LEVEL = 10; // puntos de incremento por nivel
 	
@@ -100,7 +99,7 @@ public class Match implements Runnable{
 	 */
 	public void writePlayers(){
 		
-		MessageMatch match = new MessageMatch(Player.changeDir(this.playerLeft), Player.changeDir(this.playerRigth), changeDirDisk(), this.isGame, this.timeLeft);
+		MessageMatch match = new MessageMatch(Player.changeDir(this.playerLeft), Player.changeDir(this.playerRigth), changeDirDisk(), this.isGame, this.timeLeft, this.levelGame);
 		this.clientLeft.write(match);
 		this.clientRigth.write(match);
 	}
@@ -160,32 +159,43 @@ public class Match implements Runnable{
 		Rectangle disk = new Rectangle(this.disk.x , this.disk.y , WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
 		
 		
-		if (rectangleLeft.contains(disk.x - tamRec, disk.y)
+		if (rectangleLeft.contains(new Point(disk.x - tamRec, disk.y))
 				|| rectangleLeft.contains(new Point(disk.x, disk.y + tamRec))) {
 			//System.out.println("Hizo Gol el Derecho");
 			playerRigth.addGoals(); // suma un gol
 			addPointPlayer(playerRigth); // agrega puntos al jugador
+			playerLeft.goalOwnDoor(); //resta goles al jugador de la izquierda pore recibir gol
 			createdisk();
-			addLevel();
 			sound.play(Sounds.RUTA_SOUND_POINT, false);
 		}else if (rectangleRigth.contains(new Point(disk.x + tamRec, disk.y))
 				|| rectangleRigth.contains(new Point(disk.x + tamRec, disk.y + tamRec))) {
 			System.out.println("Hizo Gol el Izquierdo");
 			playerLeft.addGoals(); // suma el gol
 			addPointPlayer(playerLeft); // agrega puntos
+			playerRigth.goalOwnDoor(); //resta goles al jugador de la derecha por recibir gol
 			creatediskRigth();
-			addLevel();
 			sound.play(Sounds.RUTA_SOUND_POINT, false);
 		}
 	}
 	
 	/**
-	 * incrementa el nivel cada dos goles
+	 * el nivel se aumenta dependiendo el tiempo transucrrido
 	 */
-	private void addLevel() {
-		if ((playerLeft.getGoals() % 2 == 0)
-				|| (playerRigth.getGoals() % 2 == 0)) {
-			levelGame++;
+	private void refreshLevel() {
+		if(isLevelOne()){
+			this.levelGame = 1;
+		} else if (isLevelTwo()){
+			this.levelGame = 2;
+		} else if (isLevelThree()){
+			this.levelGame = 3;
+		} else if (isLevelFour()){
+			this.levelGame = 4;
+		} else if (isLevelFive()){
+			this.levelGame = 5;
+		} else if (isLevelSix()){
+			this.levelGame = 6;
+		} else {
+			System.out.println("NIVEL NO ESPERADO timpo restante: "+this.timeLeft);
 		}
 	}
 	
@@ -193,36 +203,11 @@ public class Match implements Runnable{
 	 * agrega puntos al jugador correspondiente al nivel en el que se encuentra el partido
 	 * @param player
 	 */
-	private void addPointPlayer(Player player) {
-		
-		switch (this.levelGame) {
-		case 1:
-			
-			break;		
-		case 2:
-			
-			break;
-		case 3:
-			
-			break;
-		case 4:
-			
-			break;
-		case 5:
-			
-			break;
-		case 6:
-			
-			break;
-		default:
-			break;
-		}
-		
-//		if (levelGame == 1) {
-//			player.setPoints(player.getPoints() + AMMOUNT_POINTS_FOR_GOAL);
-//		}else {
-//			player.setPoints(player.getPoints() + (AMMOUNT_POINTS_FOR_GOAL + (AMMOUNT_INCREMENT_POINT_LEVEL * levelGame)));
-//		}
+	private void addPointPlayer(Player player) {	
+		if (levelGame == 1) 
+			player.setPoints(player.getPoints() + AMMOUNT_POINTS_FOR_GOAL_INITIAL);
+		else 
+			player.setPoints(player.getPoints() + (AMMOUNT_POINTS_FOR_GOAL_INITIAL + (AMMOUNT_INCREMENT_POINT_LEVEL * (levelGame-1))));		
 	}
 
 	@Override
@@ -234,7 +219,8 @@ public class Match implements Runnable{
 		
 		while (isGame) {	
 			final long timerStart = System.nanoTime();
-			//verficair colision inicial para darle movimiento 			
+			//verficair colision inicial para darle movimiento 		
+			
 			defineMovementDisk();
 			definePoints();
 			
@@ -250,10 +236,12 @@ public class Match implements Runnable{
 			
 			if (delta >= 1) {
 				delta--;
-				if(this.timeLeft>0)
+				if(this.timeLeft>0){
 					this.timeLeft -= 1;
-				else
+					this.refreshLevel();
+				}else{
 					isGame=false;
+				}
 			}
 			
 			if (playerLeft.getGoals() == 7 || playerRigth.getGoals() == 7) {
@@ -353,31 +341,32 @@ public class Match implements Runnable{
 	 *mueve el disco de forma recta hacia la derecha 
 	 */
 	private void moveDiskRectTurnRigth(){
-		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x + tamRec, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		if (tableGame.contains(disk)) {
-			this.disk.setLocation(this.disk.x + (SPEED * levelGame), this.disk.y);
+		int nextX = (this.disk.x + this.getSpeed());
+		Rectangle positionDiskNext = new Rectangle(nextX + (WindowsGame.DISC_TAM/2), this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if (tableGame.contains(positionDiskNext)) {			
+			this.disk.setLocation(nextX, this.disk.y);
 		}else {
 			orientation = 1;
 		}
-		//this.disk.x++;
 	}
 	/**
 	 *mueve el disco de forma diagonal hacia abajo para la derecha
 	 */
 	private void moveDiskDiagonalDownTurnRigth(){
 		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x + tamRec, this.disk.y + tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		if(tableGame.contains(disk)){
-			this.disk.setLocation(this.disk.x + (SPEED * levelGame), this.disk.y + (SPEED * levelGame));
+		int nextX = (this.disk.x + this.getSpeed());
+		int nextY = (this.disk.y + this.getSpeed());
+		Rectangle positionDiskNext = new Rectangle(nextX + tamRec, nextY +  tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if(tableGame.contains(positionDiskNext)){
+			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (disk.x + tamRec > (WindowsGame.TABLE_WIDTH - 100)) { // golpea pared derecha
+			if (nextX + tamRec > (WindowsGame.TABLE_WIDTH - 100)) { // golpea pared derecha
 				this.orientation = 2;
-			}else if (disk.x < (WindowsGame.TABLE_WIDTH - 100)) { // golpea pared inferior 
+			}else if (nextX < (WindowsGame.TABLE_WIDTH - 100)) { // golpea pared inferior 
 				this.orientation = 3;
+			} else{
+				System.out.println("x:"+nextX+" - y:"+nextY);
 			}
-			//this.disk.x++;
-			//this.disk.y++;			
 		}
 	}
 	/**
@@ -385,17 +374,19 @@ public class Match implements Runnable{
 	 */
 	private void moveDiskDiagonalUpTurnRigth(){
 		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x + tamRec, this.disk.y - tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		if(tableGame.contains(disk)){
-			this.disk.setLocation(this.disk.x + (SPEED * levelGame), this.disk.y - (SPEED * levelGame));
+		int nextX = this.disk.x + this.getSpeed();
+		int nextY = this.disk.y - this.getSpeed();
+		Rectangle positionDiskNext = new Rectangle(nextX + tamRec, nextY -  tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if(tableGame.contains(positionDiskNext)){
+			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (disk.y < 145) { //si golpea en la parte superior
+			if (nextY < 160) { //si golpea en la parte superior
 				this.orientation = 5;
-			}else if (disk.y > 160) { // golpea en la pared derecha
+			}else if (nextY >= 160) { // golpea en la pared derecha
 				this.orientation = 0;
+			} else{
+				System.out.println("x:"+nextX+" - y:"+nextY);
 			}
-			//this.disk.x++;
-			//this.disk.y--;						
 		}
 	}
 	
@@ -404,9 +395,10 @@ public class Match implements Runnable{
 	 */
 	private void moveDiskRectTurnLeft(){
 		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x - tamRec, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		if (tableGame.contains(disk)) {
-			this.disk.setLocation(this.disk.x - (SPEED * levelGame), this.disk.y);
+		int nextX = this.disk.x - this.getSpeed();
+		Rectangle positionDiskNext = new Rectangle(nextX - tamRec, this.disk.y, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if (tableGame.contains(positionDiskNext)) {
+			this.disk.setLocation(nextX, this.disk.y);
 		}else {
 			orientation = 4;
 		}
@@ -417,18 +409,19 @@ public class Match implements Runnable{
 	 */
 	private void moveDiskDiagonalDownTurnLeft(){
 		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x - tamRec, this.disk.y + tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		if(tableGame.contains(disk)){
-			this.disk.setLocation(this.disk.x - (SPEED * levelGame), this.disk.y + (SPEED * levelGame));
+		int nextX = this.disk.x - this.getSpeed();
+		int nextY = this.disk.y + this.getSpeed();
+		Rectangle positionDiskNext = new Rectangle(nextX - tamRec, nextY +  tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if(tableGame.contains(positionDiskNext)){
+			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (disk.x < 15) { // golpea la pared izquierda
+			if (nextX < 30) { // golpea la pared izquierda
 				this.orientation = 5;
-			}else if(disk.x > 30){ // golpea la pared inferior
-				this.orientation = 0;
-				
-			}
-			//this.disk.x--;
-			//this.disk.y++;		
+			}else if(nextX >= 30){ // golpea la pared inferior
+				this.orientation = 0;				
+			} else{
+				System.out.println("x:"+nextX+" - y:"+nextY);
+			}	
 		}
 	}
 	/**
@@ -436,18 +429,41 @@ public class Match implements Runnable{
 	 */
 	private void moveDiskDiagonalUpTurnLeft(){
 		int tamRec = WindowsGame.DISC_TAM/2;
-		Rectangle disk = new Rectangle(this.disk.x - tamRec, this.disk.y - tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
-		
-		if(tableGame.contains(disk)){
-			this.disk.setLocation(this.disk.x - (SPEED * levelGame), this.disk.y - (SPEED * levelGame));
+		int nextX = this.disk.x - this.getSpeed();
+		int nextY = this.disk.y - this.getSpeed();
+		Rectangle positionDiskNext = new Rectangle(nextX - tamRec, nextY - tamRec, WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);			
+		if(tableGame.contains(positionDiskNext)){
+			this.disk.setLocation(nextX, nextY);
 		} else {
-			if (disk.x < 5) { // golpea la pared izquierda
+			if (nextX < 5) { // golpea la pared izquierda
 				this.orientation = 3;
-			}else if (disk.x > 5) { // golpea la pared superior
+			}else if (nextX > 5) { // golpea la pared superior
 				this.orientation = 2;
+			} else{
+				System.out.println("x:"+nextX+" - y:"+nextY);
 			}
-			//this.disk.x--;
-			//this.disk.y--;						
+		}
+	}
+	
+	/**
+	 * retorna velocidad a partir del nivel
+	 * @return
+	 */
+	private int getSpeed(){
+		if(levelGame == 1){
+			return 15;
+		} else if (levelGame == 2){
+			return 18;
+		} else if (levelGame == 3){
+			return 21;
+		} else if (levelGame == 4){
+			return 25;
+		} else if (levelGame == 5){
+			return 28;
+		} else if (levelGame == 6){
+			return 33;
+		} else {
+			return 0;
 		}
 	}
 	
@@ -469,6 +485,54 @@ public class Match implements Runnable{
 			System.out.println("GANA Jugador: "+this.playerLeft.getName());
 		else
 			System.out.println("GANA Jugador: "+this.playerRigth.getName());
+	}
+	
+	/**
+	 * 120 s - 100 s
+	 * @return
+	 */
+	private boolean isLevelOne(){
+		return this.timeLeft<=TOTAL__TIME_VALUE && this.timeLeft>=100;
+	}
+	
+	/**
+	 * 99 s - 80 s
+	 * @return
+	 */
+	private boolean isLevelTwo(){
+		return this.timeLeft<=99 && this.timeLeft>=80;
+	}
+	
+	/**
+	 * 79 s - 60 s 
+	 * @return
+	 */
+	private boolean isLevelThree(){
+		return this.timeLeft<=79 && this.timeLeft>=60;
+	}
+	
+	/**
+	 *59 s - 40 s 
+	 * @return
+	 */
+	private boolean isLevelFour(){
+		return this.timeLeft<=59 && this.timeLeft>=40;
+	}
+	
+	/**
+	 * 39 s - 20 s 
+	 * @return
+	 */
+	private boolean isLevelFive(){
+		return this.timeLeft<=39 && this.timeLeft>=20;
+	}
+	
+	/**
+	 * 19 s - 0 s ¡gol ultimo segundo!
+	 * @return
+	 */
+	private boolean isLevelSix(){
+		return this.timeLeft<=19 && this.timeLeft>=0;
 	}
 	
 	/**
