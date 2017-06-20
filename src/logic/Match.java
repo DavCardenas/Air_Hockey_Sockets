@@ -155,15 +155,14 @@ public class Match implements Runnable{
 	/**
 	 * sirve para calcular cuando y quien hace puntos
 	 */
-	private void definePoints() {
-		System.out.println("Entra al metodo");
+	private void definePoints() {		
 		int tamRec = WindowsGame.DISC_TAM;
 		Rectangle disk = new Rectangle(this.disk.x , this.disk.y , WindowsGame.DISC_TAM, WindowsGame.DISC_TAM);
 		
 		
 		if (rectangleLeft.contains(disk.x - tamRec, disk.y)
 				|| rectangleLeft.contains(new Point(disk.x, disk.y + tamRec))) {
-			System.out.println("Hizo Gol el Derecho");
+			//System.out.println("Hizo Gol el Derecho");
 			playerRigth.addGoals(); // suma un gol
 			addPointPlayer(playerRigth); // agrega puntos al jugador
 			createdisk();
@@ -191,15 +190,39 @@ public class Match implements Runnable{
 	}
 	
 	/**
-	 * agrega puntos al jugador correspondiente
+	 * agrega puntos al jugador correspondiente al nivel en el que se encuentra el partido
 	 * @param player
 	 */
 	private void addPointPlayer(Player player) {
-		if (levelGame == 1) {
-			player.setPoints(player.getPoints() + AMMOUNT_POINTS_FOR_GOAL);
-		}else {
-			player.setPoints(player.getPoints() + (AMMOUNT_POINTS_FOR_GOAL + (AMMOUNT_INCREMENT_POINT_LEVEL * levelGame)));
+		
+		switch (this.levelGame) {
+		case 1:
+			
+			break;		
+		case 2:
+			
+			break;
+		case 3:
+			
+			break;
+		case 4:
+			
+			break;
+		case 5:
+			
+			break;
+		case 6:
+			
+			break;
+		default:
+			break;
 		}
+		
+//		if (levelGame == 1) {
+//			player.setPoints(player.getPoints() + AMMOUNT_POINTS_FOR_GOAL);
+//		}else {
+//			player.setPoints(player.getPoints() + (AMMOUNT_POINTS_FOR_GOAL + (AMMOUNT_INCREMENT_POINT_LEVEL * levelGame)));
+//		}
 	}
 
 	@Override
@@ -304,8 +327,8 @@ public class Match implements Runnable{
 			}
 			
 		} else {
-			Rectangle diskRigthUp = new Rectangle((this.disk.x + tamanoRec), this.disk.y, tamanoRec, tamanoRec); //parte izquierda arriba del disco
-			Rectangle diskRigthDown = new Rectangle((this.disk.x + tamanoRec), (this.disk.y + tamanoRec), tamanoRec, tamanoRec);//parte izquierda abajo del disco			
+			Rectangle diskRigthUp = new Rectangle((this.disk.x + tamanoRec), this.disk.y, tamanoRec, tamanoRec); //parte derecha arriba del disco
+			Rectangle diskRigthDown = new Rectangle((this.disk.x + tamanoRec), (this.disk.y + tamanoRec), tamanoRec, tamanoRec);//parte derecha abajo del disco			
 			
 			Rectangle playerRectangleRigth = new Rectangle(this.playerRigth.getPosition().x - tamanoPlay, this.playerRigth.getPosition().y -  tamanoPlay, WindowsGame.PLAYER_WIDTH, WindowsGame.PLAYER_WIDTH);
 			
